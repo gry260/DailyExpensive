@@ -7,7 +7,7 @@
  */
 
 
-abstract class Transportaion extends DailyExpense
+abstract class Transportation extends DailyExpense
 {
   public function getSymbol(){}
   public function getID(){}

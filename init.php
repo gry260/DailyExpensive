@@ -8,6 +8,10 @@
 
 
 
+require_once("db.php");
+$db = new Database();
+$pdo_dbh = $db->getConnection();
+
 
 
 ?>

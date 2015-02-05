@@ -6,6 +6,7 @@ abstract class DailyExpense
   protected $_user_id;
   protected $_notes;
   protected $_type_id;
+  protected $_super_type_id;
   protected $_sub_type_id;
   protected $_url;
   protected $_id;
@@ -42,7 +43,10 @@ abstract class DailyExpense
           if (!empty($result["date"]))
             $record->setDate($result["date"]);
           if (!empty($result["payment_id"]))
-            $record->setDate($result["payment_id"]);
+            $record->setPaymentID($result["payment_id"]);
+          if(!empty($result["supertypeid"])){
+            $record->setSuperID($result["supertypeid"]);
+          }
 
           $res[$result["id"]] = $record;
         }
@@ -112,6 +116,16 @@ abstract class DailyExpense
     return $this->_payment_id;
   }
 
+  public function setSuperID($super_id)
+  {
+    $this->_super_type_id = $super_id;
+  }
+
+  public function getSuperID()
+  {
+    return $this->_super_type_id;
+  }
+
   public function setUserID($userid)
   {
     $this->_user_id = $userid;
@@ -178,7 +192,7 @@ abstract class DailyExpense
     $this->_sub_type_id = $the_sub_is;
   }
 
-  public function SubTypeID()
+  public function getSubTypeID()
   {
     if (!empty($this->_sub_type_id))
       return $this->_sub_type_id;

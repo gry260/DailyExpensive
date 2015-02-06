@@ -37,6 +37,18 @@ if (!empty($_POST['user_id'])) {
 }
 
 
+if (!empty($_POST['id'])) {
+  $where = array();
+  if (!preg_match('/^[0-9]+$/', $_POST['id'])) {
+    $_SESSION['msgs']['record'][] = "Please Contact IT.";
+  } else {
+    $where["id"] = $_POST['id'];
+  }
+} else {
+  $_SESSION['msgs']['record'][] = "Please Contact IT.";
+}
+
+
 if (!empty($_POST['notes'])) {
   $data["notes"] = '"'.htmlentities($_POST['notes'], ENT_QUOTES).'"';
 }
@@ -52,12 +64,19 @@ if (!empty($_POST["url"])) {
   if (!filter_var($_POST["url"], FILTER_VALIDATE_URL)) {
     $_SESSION['msgs']['record'][] = "Your URL is incorrect. Please enter correct format of URL";
   } else
-    $data["url"] = '"'.$_POST["url"].'"';
+  $data["url"] = '"'.$_POST["url"].'"';
 }
 
 
 $layer = new db_abstract_layer();
-$layer->inserting($data);
+if($_POST['action_type'] === "update"){
+  $layer->updating($data, "daily_record", $where);
+}
+else{
+  $layer->inserting($data, "daily_record");
+}
+header("location: index.php");
+exit;
 
 
 

@@ -95,7 +95,19 @@ if($rowCount >0){
   exit;
 }
 
-if (!empty($data)) {
+if(!empty($_POST['update_user'])){
+  if (!empty($_POST['user_id'])) {
+    if (!preg_match('/^[0-9]+$/', $_POST['user_id'])) {
+      $_SESSION['msgs']['record'][] = "Please Contact IT.";
+    } else {
+      $where = array("id"=>$_POST['user_id']);
+    }
+  } else {
+    $_SESSION['msgs']['record'][] = "Please Contact IT.";
+  }
+  $layer->updating($data, "users", $where);
+}
+else if (!empty($data)) {
   $lastId = $layer->inserting($data, "users");
 }
 if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image'])) {

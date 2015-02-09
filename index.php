@@ -1,8 +1,12 @@
 <?php
 session_start();
 require_once("DailyExpense/DailyExpense.php");
-if (!empty($_SESSION['daily']['user_id']))
+require_once("DailyExpense/Users.php");
+if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id']);
+  $user = new Users($_SESSION['daily']['user_id']);
+  $userInfo = $user->getUserInfo();
+}
 $general = DailyExpense::getDailySuperTypes();
 $sub_types = DailyExpense::getDailySubTypes();
 $payments = DailyExpense::getPayments();
@@ -114,5 +118,23 @@ if (!empty($records) && !empty($_SESSION['daily']['user_id'])) {
   <input type="password" name="password" placeholder="password"/>
   <input type="submit"/>
 </form>
+
+<?php
+if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
+  echo '<br /><br /><form action="addUsers.php" method="POST" enctype="multipart/form-data">
+    <label>First Name:</label><input type="text" name="firstname" placeholder="firstname" value="';
+    echo $userInfo['firstname'];
+    echo '">';
+  echo '<label>Last Name:</label><input type="text" name="lastname" placeholder="lastname" value="'.$userInfo['lastname'].'">';
+  echo '<label>Password:</label><input type="password" name="password" placeholder="password">';
+  echo '<label>Confirm Password</label> <input type="password" name="confirm_password" placeholder="confirm password"/>
+    <input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>
+<input type="submit" name="update_user"/>
+</form>';
+
+
+}
+
+?>
 </body>
 </html>

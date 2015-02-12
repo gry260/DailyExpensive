@@ -23,6 +23,15 @@ class Users
         $statement->execute();
         return  $statement->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getImageInfo()
+    {
+        $q = 'select max(name) as imageName from sandbox.profileimages where user_id = '.$this->_user_id.'';
+        global $pdo_dbh;
+        $statement = $pdo_dbh->prepare($q);
+        $statement->execute();
+        return  $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }
 
 ?>

@@ -6,6 +6,7 @@ if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id']);
   $user = new Users($_SESSION['daily']['user_id']);
   $userInfo = $user->getUserInfo();
+  $userImages = $user->getImageInfo();
 }
 $general = DailyExpense::getDailySuperTypes();
 $sub_types = DailyExpense::getDailySubTypes();
@@ -101,25 +102,23 @@ if (!empty($records) && !empty($_SESSION['daily']['user_id'])) {
 </form>
 <br/>
 <br/>
-
-<form action="addUsers.php" method="POST" enctype="multipart/form-data">
+<?php
+if(empty($_SESSION['daily']['user_id']) && empty($userInfo)) {
+  echo '<form action="addUsers.php" method="POST" enctype="multipart/form-data">
   <input type="text" name="firstname" placeholder="firstname"/>
   <input type="text" name="lastname" placeholder="lastname"/>
   <input type="email" name="email" placeholder="email"/>
   <input type="password" name="password" placeholder="password">
   <input type="password" name="confirm_password" placeholder="confirm password"/>
   <input type="file" name="profile_image" placeholder="confirm password"/>
-  <input type="submit"/>
+  <input type="submit" name="add_user"/>
 </form>
-<br/>
-
-<form action="login.php" method="POST">
+<br/><form action="login.php" method="POST">
   <input type="email" name="email" placeholder="email"/>
   <input type="password" name="password" placeholder="password"/>
   <input type="submit"/>
-</form>
-
-<?php
+</form>';
+}
 if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
   echo '<br /><br /><form action="addUsers.php" method="POST" enctype="multipart/form-data">
     <label>First Name:</label><input type="text" name="firstname" placeholder="firstname" value="';
@@ -127,14 +126,14 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
     echo '">';
   echo '<label>Last Name:</label><input type="text" name="lastname" placeholder="lastname" value="'.$userInfo['lastname'].'">';
   echo '<label>Password:</label><input type="password" name="password" placeholder="password">';
-  echo '<label>Confirm Password</label> <input type="password" name="confirm_password" placeholder="confirm password"/>
-    <input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>
+  echo '<label>Confirm Password</label> <input type="password" name="confirm_password" placeholder="confirm password"/>';
+  $file_path = urlencode('files/profileimages/'.$_SESSION['daily']['user_id'].'/'.$userImages['imageName']);
+  echo '<img src="imageServe.php?file_path='.$file_path.'" width="100" height="100" />';
+  echo '<input type="file"  name="profile_image"/>';
+  echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>
 <input type="submit" name="update_user"/>
 </form>';
-
-
 }
-
 ?>
 </body>
 </html>

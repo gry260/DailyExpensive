@@ -83,16 +83,18 @@ if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image'])) {
     $_SESSION['msgs']['user'] = $msgs;
 }
 
-require_once("db.php");
-$db = new Database();
-$pdh = $db->getConnection();
-$statment = $pdh->prepare('select * from sandbox.users where email ='.$data["email"]);
-$statment->execute();
-$rowCount = $statment->rowCount();
-if($rowCount >0){
-  $_SESSION['msgs']['user'][] = 'This email has been taken. Please user another email address.';
-  header("location: index.php");
-  exit;
+if(!empty($_POST['add_user'])) {
+  require_once("db.php");
+  $db = new Database();
+  $pdh = $db->getConnection();
+  $statment = $pdh->prepare('select * from sandbox.users where email =' . $data["email"]);
+  $statment->execute();
+  $rowCount = $statment->rowCount();
+  if ($rowCount > 0) {
+    $_SESSION['msgs']['user'][] = 'This email has been taken. Please user another email address.';
+    header("location: index.php");
+    exit;
+  }
 }
 
 if(!empty($_POST['update_user'])){
@@ -100,6 +102,7 @@ if(!empty($_POST['update_user'])){
     if (!preg_match('/^[0-9]+$/', $_POST['user_id'])) {
       $_SESSION['msgs']['record'][] = "Please Contact IT.";
     } else {
+      $lastId = htmlentities($_POST['user_id'], ENT_QUOTES);
       $where = array("id"=>$_POST['user_id']);
     }
   } else {

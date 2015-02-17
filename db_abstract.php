@@ -20,6 +20,7 @@ class db_abstract_layer extends Database
         $q = substr($q, 0, -2).')';
         $q = $q.$q2;
         $q = substr($q, 0, -2).')';
+
         $statement = $this->_connection->prepare($q);
         $statement->execute();
         return $this->_connection->lastInsertId();

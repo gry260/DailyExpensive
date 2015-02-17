@@ -133,6 +133,24 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
   echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>
 <input type="submit" name="update_user"/>
 </form>';
+  ?>
+    <br />
+  <br />
+ <form method="post" action="addType.php">
+   <?php
+   echo '<select name="supertypeid">';
+   if (!empty($general)) {
+     foreach ($general as $value) {
+       echo '<option value="' . $value["id"] . '">' . $value["name"] . '</option>';
+     }
+   }
+   echo '</select>';
+   ?>
+  <input type="text" name="name" />
+   <input type="hidden" name="user_id" value="<?php echo $userInfo["id"];?>" />
+   <input type="submit" />
+ </form>
+<?php
 }
 ?>
 </body>

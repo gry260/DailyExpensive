@@ -53,9 +53,8 @@ abstract class DailyExpense
                     $record->setDate($result["date"]);
                 if (!empty($result["payment_id"]))
                     $record->setPaymentID($result["payment_id"]);
-                if (!empty($result["supertypeid"])) {
+                if (!empty($result["supertypeid"]))
                     $record->setSuperID($result["supertypeid"]);
-                }
                 $res[$result["id"]] = $record;
             }
             return $res;

@@ -150,6 +150,31 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
    <input type="hidden" name="user_id" value="<?php echo $userInfo["id"];?>" />
    <input type="submit" />
  </form>
+  <form>
+    <?php
+    if(!empty($general)){
+      echo '<br /><br /><br />';
+      foreach($general as $key => $value){
+        echo '<input type="checkbox" name="general_type" />'.$value["name"].'&nbsp;&nbsp;&nbsp;&nbsp;';
+      }
+    }
+    echo '<br /><br />';
+    echo  '<select>
+        <option>Last 24 Hours</option>
+        <option>Last Week</option>
+        <option selected>Last Month</option>
+        <option>Last 6 Months</option>
+        <option>Last Year</option>
+        <option>Last 5 Year</option>
+        <option>Last 10 Year</option>
+        </select>';
+    ?>
+    .
+    <br /><br />Reports In
+    <input type="checkbox" />Category Report &nbsp;  &nbsp;   <input type="checkbox" />SubCategory Report &nbsp;  &nbsp;
+    <input type="checkbox" />Monthly Report &nbsp;  &nbsp;     <input type="checkbox" />Annual Report &nbsp;  &nbsp;
+    <br /><br /><input type="submit" />
+  </form>
 <?php
 }
 ?>

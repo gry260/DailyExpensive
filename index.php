@@ -150,7 +150,7 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
    <input type="hidden" name="user_id" value="<?php echo $userInfo["id"];?>" />
    <input type="submit" />
  </form>
-  <form>
+  <form method="post" action="getReports.php">
     <?php
     if(!empty($general)){
       echo '<br /><br /><br />';
@@ -169,14 +169,20 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
         <option>Last 10 Year</option>
         </select>';
     ?>
-    .
     <br /><br />Reports In
-    <input type="checkbox" />Category Report &nbsp;  &nbsp;   <input type="checkbox" />SubCategory Report &nbsp;  &nbsp;
-    <input type="checkbox" />Monthly Report &nbsp;  &nbsp;     <input type="checkbox" />Annual Report &nbsp;  &nbsp;
+    <input type="checkbox" name="report[]" value="category"/>Category Report &nbsp;  &nbsp;
+    <input type="checkbox" name="report[]" value="subcategory"/>SubCategory Report &nbsp;  &nbsp;
+    <input type="checkbox" name="report[]" value="monthly" />Monthly Report &nbsp;  &nbsp;
+    <input type="checkbox" name="report[]" value="annual"/>Annual Report &nbsp;  &nbsp;
     <br /><br /><input type="submit" />
   </form>
 <?php
 }
+
+echo '<pre>';
+print_r($_SESSION['daily']);
+echo '</pre>';
+
 ?>
 </body>
 </html>

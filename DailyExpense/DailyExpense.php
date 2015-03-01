@@ -21,7 +21,6 @@ abstract class DailyExpense
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
     where d.user_id = ' . $user_id.' and (dy.user_id is null or dy.user_id = '.$user_id.')';
-
         $statement = $pdo_dbh->prepare($q);
         $statement->execute();
         $n = $statement->rowCount();
@@ -53,8 +52,9 @@ abstract class DailyExpense
                     $record->setDate($result["date"]);
                 if (!empty($result["payment_id"]))
                     $record->setPaymentID($result["payment_id"]);
-                if (!empty($result["supertypeid"]))
+                if (!empty($result["supertypeid"])) {
                     $record->setSuperID($result["supertypeid"]);
+                }
                 $res[$result["id"]] = $record;
             }
             return $res;

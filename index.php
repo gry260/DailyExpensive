@@ -2,11 +2,16 @@
 session_start();
 require_once("DailyExpense/DailyExpense.php");
 require_once("DailyExpense/Users.php");
+require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id']);
   $user = new Users($_SESSION['daily']['user_id']);
   $userInfo = $user->getUserInfo();
   $userImages = $user->getImageInfo();
+}
+else {
+  $_SESSION['daily']['temp_user_id'] = get_client_ip_server();
+ echo  md5($_SESSION['daily']['temp_user_id']);
 }
 $general = DailyExpense::getDailySuperTypes();
 $sub_types = DailyExpense::getDailySubTypes();
@@ -178,11 +183,6 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)){
   </form>
 <?php
 }
-
-echo '<pre>';
-print_r($_SESSION['daily']);
-echo '</pre>';
-
 ?>
 </body>
 </html>

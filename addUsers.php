@@ -39,6 +39,16 @@ if (!empty($_POST["lastname"])) {
 require_once("emailAddressValidator.php");
 require_once("passwordValidator.php");
 
+if (!empty($_POST['temp_user_id'])) {
+  if (!preg_match('/^[0-9]+$/', $_POST['temp_user_id'])) {
+    $_SESSION['msgs']['user'][] = "Please Contact IT.";
+  } else
+    $data["temp_user_id"] = htmlentities($_POST['temp_user_id'], ENT_QUOTES);
+} else {
+  $_SESSION['msgs']['user'][] = "Please Contact IT.";
+}
+
+
 if (!empty($_POST['email'])) {
   $email_validator = new EmailAddressValidator();
   if (!$email_validator->check_email_address($_POST['email']))
@@ -112,6 +122,9 @@ if(!empty($_POST['update_user'])){
 }
 else if (!empty($data)) {
   $lastId = $layer->inserting($data, "users");
+  $upd = array('user_id'=>$lastId);
+  $where = array("user_id"=>$data["temp_user_id"], " and is_temp"=> "'1'");
+  $layer->updating($upd, "daily_record", $where);
 }
 if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image'])) {
   $ext = pathinfo($file_info['file_info']['name'], PATHINFO_EXTENSION);

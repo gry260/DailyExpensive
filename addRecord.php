@@ -26,13 +26,23 @@ if (!empty($_POST['payment_type_id'])) {
   $_SESSION['msgs']['record'][] = "Please Contact IT.";
 }
 
+
 if (!empty($_POST['user_id'])) {
   if (!preg_match('/^[0-9]+$/', $_POST['user_id'])) {
     $_SESSION['msgs']['record'][] = "Please Contact IT.";
   } else {
     $data["user_id"] = $_POST['user_id'];
   }
-} else {
+}
+else if(!empty($_POST['temp_user_id'])){
+  if (!preg_match('/^[0-9]+$/', $_POST['temp_user_id'])) {
+    $_SESSION['msgs']['record'][] = "Please Contact IT.";
+  } else {
+    $data["user_id"] = $_POST['temp_user_id'];
+    $data["is_temp"] = '"1"';
+  }
+}
+else {
   $_SESSION['msgs']['record'][] = "Please Contact IT.";
 }
 

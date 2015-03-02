@@ -32,6 +32,24 @@ class Users
         $statement->execute();
         return  $statement->fetch(PDO::FETCH_ASSOC);
     }
+
+    public  function getDailySubTypes()
+    {
+        global $pdo_dbh;
+        $q = 'select * from sandbox.dailysubtypes
+where (user_id is null or user_id='.$this->_user_id.') ';
+        $statement = $pdo_dbh->prepare($q);
+        $statement->execute();
+        $n = $statement->rowCount();
+        if ($n > 0) {
+            $res = array();
+            for ($i = 0; $i < $n; $i++) {
+                $result = $statement->fetch(PDO::FETCH_ASSOC);
+                $res[] = $result;
+            }
+        }
+        return $res;
+    }
 }
 
 ?>

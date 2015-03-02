@@ -13,14 +13,33 @@ abstract class DailyExpense
     protected $_date;
     protected $_payment_id;
 
-    public static function generateObjects($user_id)
+
+    public static function generateObjects($user_id, $isTemp)
     {
         global $pdo_dbh;
-        $q = 'select *, dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id
+        $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid
     from sandbox.daily_record d
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
     where d.user_id = ' . $user_id.' and (dy.user_id is null or dy.user_id = '.$user_id.')';
+    if($isTemp == true)
+        $q .= ' and d.is_temp = "1"';
+    $q .= '
+    union
+select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid
+from sandbox.users u
+left join sandbox.users_temp temp on u.temp_user_id = temp.id
+left join sandbox.daily_record d on d.user_id = temp.id
+left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
+left join dailysupertypes dyy on dy.supertypeid = dyy.id
+where u.';
+        if($isTemp == true)
+            $q .= 'temp_user_id=';
+        else
+            $q .= 'id=';
+
+        $q .= $user_id.' and d.is_temp = "1"';
+
         $statement = $pdo_dbh->prepare($q);
         $statement->execute();
         $n = $statement->rowCount();
@@ -61,6 +80,16 @@ abstract class DailyExpense
         }
     }
 
+    public function setIsTemp($bool)
+    {
+
+    }
+
+    public function getIsTemp()
+    {
+
+    }
+
     public static function getDailySuperTypes()
     {
         global $pdo_dbh;
@@ -78,10 +107,11 @@ abstract class DailyExpense
         return $res;
     }
 
-    public static function getDailySubTypes()
+    public static  function getDailySubTypes()
     {
         global $pdo_dbh;
-        $q = 'select * from sandbox.dailysubtypes';
+        $q = 'select * from sandbox.dailysubtypes
+where (user_id is null) ';
         $statement = $pdo_dbh->prepare($q);
         $statement->execute();
         $n = $statement->rowCount();
@@ -94,6 +124,7 @@ abstract class DailyExpense
         }
         return $res;
     }
+
 
     public static function getPayments()
     {

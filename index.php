@@ -18,13 +18,13 @@ else {
   if($bool == false){
     require_once("db_abstract.php");
     $layer = new db_abstract_layer();
-    $data = array("user_id"=>'"'.$_SESSION['daily']['temp_user_id'].'"');
+    $data = array("user_id"=>'"'.$usertemp->getUserId().'"');
     $_SESSION['daily']['temp_user_id'] = $layer->inserting($data, "users_temp");
   }
   else
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
-    $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
-    $sub_types = DailyExpense::getDailySubTypes();
+  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
+  $sub_types = DailyExpense::getDailySubTypes();
 }
 
 $general = DailyExpense::getDailySuperTypes();
@@ -45,8 +45,9 @@ if (!empty($records) && (!empty($_SESSION['daily']['user_id']) || !empty($_SESSI
     echo '<form method="POST" action="addRecord.php">
         <input type="hidden" name="id" value="' . $value->getRecordID() . '" />
         <input type="hidden" name="user_id" value="' . $value->getUserID() . '" />
-        <input type="text" name="notes" value="' . $value->getNote() . '" />
-        <input type="url" name="url" value="' . $value->getUrl() . '" />
+        <input type="text" placeholder="notes" name="notes" value="' . $value->getNote() . '" />
+        <input type="url" placeholder="url" name="url" value="' . $value->getUrl() . '" />
+        <input type="text" placeholder="amount" name="amount" value="' . $value->getAmount() . '" />
         <input type="date" name="date" value="' . $value->getDate() . '" />';
     echo '<select>';
     if (!empty($general)) {
@@ -113,7 +114,8 @@ if (!empty($records) && (!empty($_SESSION['daily']['user_id']) || !empty($_SESSI
   echo '</select>
   <input type="text" name="notes" placeholder="notes"/>
   <input type="date" name="date"/>
-  <input type="url" name="url" placeholder="url"/>';
+  <input type="url" name="url" placeholder="url"/>
+  <input type="text" name="amount" placeholder="amount"/>';
   if(!empty($_SESSION['daily']['user_id']))
     echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
   else if(!empty(  $_SESSION['daily']['temp_user_id'])){

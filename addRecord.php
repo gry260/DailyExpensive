@@ -63,6 +63,16 @@ if (!empty($_POST['notes'])) {
   $data["notes"] = '"'.htmlentities($_POST['notes'], ENT_QUOTES).'"';
 }
 
+if (!empty($_POST['amount'])) {
+  if(!is_numeric($_POST['amount'])){
+    $_SESSION['msgs'] =  'The amount you have entered is not numeric.';
+  }
+  else
+    $data["amount"] = '"'.htmlentities($_POST['amount'], ENT_QUOTES).'"';
+}
+
+
+
 if (!empty($_POST['date'])) {
   if (!preg_match("/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/", $_POST["date"])) {
     $_SESSION['msgs']['record'][] = "Your URL is incorrect. Please enter the correct format of date in yyyy-mm-dd.";

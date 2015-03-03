@@ -26,6 +26,11 @@ class UsersTemp
         $this->_user_id = $user_id;
     }
 
+    public function getUserId()
+    {
+      return $this->_user_id;
+    }
+
     public function getUserInfo()
     {
         $q = 'select * from sandbox.users where id = '.$this->_user_id.'';
@@ -62,14 +67,6 @@ class UsersTemp
     {
         return $this->_is_in_system;
     }
-
-    public static function GenerateTempUser($user_id)
-    {
-
-    }
-
-
-
 }
 
 ?>

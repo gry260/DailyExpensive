@@ -291,26 +291,26 @@ $payments = DailyExpense::getPayments();
       </div>
       <div class="box-body">
         <div class="row">
-          <div class="col-xs-3">
+          <div class="col-xs-2">
             <input type="text" class="form-control" placeholder="Name" name="Name">
           </div>
-          <div class="col-xs-4">
-            <select class="form-control">
+          <div class="col-xs-2">
+            <select class="form-control" id="general">
               <?php
                 if(!empty($general)){
                   foreach($general as $key => $value){
-                    echo '<option value="'.$value["id"].'">'.$value["name"].'</option>';
+                    echo '<option value="'.$value["id"].'">'.str_replace('_', ' ',$value["name"]).'</option>';
                   }
                 }
               ?>
             </select>
           </div>
-          <div class="col-xs-4">
-            <select class="form-control">
+          <div class="col-xs-2">
+            <select class="form-control" id="sub_type">
               <?php
               if(!empty($sub_types)){
                 foreach($sub_types as $key => $value){
-                  echo '<option value="'.$value["id"].'">'.$value["name"].'</option>';
+                  echo '<option data="'.$value["supertypeid"].'" value="'.$value["id"].'">'.str_replace('_', ' ',$value["name"]).'</option>';
                 }
               }
               ?>
@@ -341,5 +341,8 @@ $payments = DailyExpense::getPayments();
 <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="dist/js/app.min.js" type="text/javascript"></script>
+<script src="dist/js/daily.js" type="text/javascript"></script>
 </body>
 </html>
+
+<?php

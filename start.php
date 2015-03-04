@@ -336,6 +336,17 @@ $payments = DailyExpense::getPayments();
               <div class="col-xs-3">
                 <input type="text" class="form-control" placeholder="Notes" name="notes">
               </div>
+              <div class="col-xs-3">
+                <?php
+                echo '<select name="payment_type_id" class="form-control">';
+                if (!empty($payments)) {
+                  foreach ($payments as $value) {
+                    echo '<option value="' . $value["id"] . '">' . $value["name"] . '</option>';
+                  }
+                }
+                echo '</select>';
+                ?>
+              </div>
             </div>
             <div class="row">
               <div class="col-xs-3">
@@ -354,6 +365,45 @@ $payments = DailyExpense::getPayments();
         ?>
       </form>
     </section>
+  </div>
+  <div class="col-md-6">
+    <section class="content">
+        <div class="box box-info">
+          <div class="box-header">
+            <h3 class="box-title">Spending Records</h3>
+          </div>
+          <div class="box-body">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><div class="row"><div class="col-xs-6"><div id="example1_length" class="dataTables_length"><label><select size="1" name="example1_length" aria-controls="example1"><option value="10" selected="selected">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> records per page</label></div></div><div class="col-xs-6"><div class="dataTables_filter" id="example1_filter"><label>Search: <input type="text" aria-controls="example1"></label></div></div></div><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
+                <thead>
+                <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Rendering engine</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Browser</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Platform(s)</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Engine version</th>
+                  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">CSS </th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
+                  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Notes</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Payment Type</th></tr>
+                </thead>
+                <tfoot>
+                <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1">CSS grade</th><th rowspan="1" colspan="1">Amount</th><th rowspan="1" colspan="1">Notes</th><th rowspan="1" colspan="1">Payment Type</th>
+                </tr>
+                </tfoot>
+                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                <?php
+                if(!empty($records)){
+                  foreach($records as $key => $value){
+                    echo '<tr class="even">
+                    <td>'.$value->getName().'</td>
+                    <td>'.$value->getCategory().'</td>
+                    <td>'.$value->getsubName().'</td>
+                    <td>'.$value->getDate().'</td>
+                    <td>'.$value->getUrl().'</td>
+                    <td>'.$value->getAmount().'</td>
+                    <td>'.$value->getNote().'</td>
+                    <td>'.$value->getNote().'</td>
+                    </tr>';
+                  }
+                }
+                ?>
+                </tbody></table><div class="row"><div class="col-xs-6"><div class="dataTables_info" id="example1_info">Showing 1 to 10 of 57 entries</div></div><div class="col-xs-6"><div class="dataTables_paginate paging_bootstrap"><ul class="pagination"><li class="prev disabled"><a href="#">← Previous</a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">4</a></li><li><a href="#">5</a></li><li class="next"><a href="#">Next → </a></li></ul></div></div></div></div>
+          </div>
+        </div>
+      </section>
   </div>
   <!-- /.content -->
 </div>
@@ -375,5 +425,13 @@ $payments = DailyExpense::getPayments();
 <script src="dist/js/app.min.js" type="text/javascript"></script>
 <script src="dist/js/daily.js" type="text/javascript"></script>
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
+<script src="plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<!-- FastClick -->
+<script src='plugins/fastclick/fastclick.min.js'></script>
+
 </body>
 </html>
+

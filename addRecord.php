@@ -73,17 +73,19 @@ if (!empty($_POST['amount'])) {
 
 
 if (!empty($_POST['date'])) {
-  if (!preg_match("/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$/", $_POST["date"])) {
+  if (!preg_match("/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/", $_POST["date"])) {
     $_SESSION['msgs']['record'][] = "Your URL is incorrect. Please enter the correct format of date in yyyy-mm-dd.";
-  } else
-    $data["date"] = '"'.$_POST["date"].'"';
+  } else {
+      $piece = explode("/", $_POST['date']);
+      $data["date"] = '"'.$piece[2].'-'.$piece[0].'-'.$piece[1].'"';
+    }
 }
 
 if (!empty($_POST["url"])) {
   if (!filter_var($_POST["url"], FILTER_VALIDATE_URL)) {
     $_SESSION['msgs']['record'][] = "Your URL is incorrect. Please enter correct format of URL";
   } else
-  $data["url"] = '"'.$_POST["url"].'"';
+      $data["url"] = '"'.$_POST["url"].'"';
 }
 
 

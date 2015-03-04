@@ -13,12 +13,15 @@ abstract class DailyExpense
   protected $_id;
   protected $_date;
   protected $_payment_id;
-
+  protected $_name;
+  protected $_category;
+  protected $_sub_name;
+  protected $_payment_name;
 
   public static function generateObjects($user_id, $isTemp)
   {
     global $pdo_dbh;
-    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid
+    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
     from sandbox.daily_record d
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
@@ -27,7 +30,7 @@ abstract class DailyExpense
       $q .= ' and d.is_temp = "1"';
     $q .= '
     union
-select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid
+select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
 from sandbox.users u
 left join sandbox.users_temp temp on u.temp_user_id = temp.id
 left join sandbox.daily_record d on d.user_id = temp.id
@@ -40,7 +43,6 @@ where u.';
       $q .= 'id=';
 
     $q .= $user_id . ' and d.is_temp = "1"';
-
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();
@@ -59,6 +61,14 @@ where u.';
           $record = new $result["sub_name"]();
         }
         $record->setUserID($user_id);
+        if (!empty($result["record_name"]))
+          $record->setName($result["record_name"]);
+        if (!empty($result["super_name"]))
+          $record->setCategory($result["super_name"]);
+        if (!empty($result["sub_name"]))
+          $record->setsubName($result["sub_name"]);
+        if (!empty($result["payment_name"]))
+          $record->setPaymentName($result["pay_name"]);
         if (!empty($result["notes"]))
           $record->setNote($result["notes"]);
         if (!empty($result["url"]))
@@ -80,6 +90,46 @@ where u.';
       }
       return $res;
     }
+  }
+
+  public function setCategory($cate)
+  {
+    $this->_category = $cate;
+  }
+
+  public function getCategory()
+  {
+    return $this->_category;
+  }
+
+  public function setName($name)
+  {
+    $this->_name = $name;
+  }
+
+  public function getName()
+  {
+    return $this->_name;
+  }
+
+  public function setsubName($name)
+  {
+    $this->_sub_name = $name;
+  }
+
+  public function getsubName()
+  {
+    return $this->_sub_name;
+  }
+
+  public function setPaymentName($name)
+  {
+    $this->_payment_name = $name;
+  }
+
+  public function getPaymentName()
+  {
+    return $this->_payment_name;
   }
 
   public static function getDailySuperTypes()
@@ -141,7 +191,6 @@ where (user_id is null) ';
 
   public function getIsTemp()
   {
-
   }
 
   public function setPaymentID($payment_id)

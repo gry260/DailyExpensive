@@ -4,6 +4,8 @@ $( document ).ready(function() {
     });
     $('#date').datepicker({
     });
+    $("#example1").dataTable();
+
 });
 
 

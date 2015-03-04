@@ -4,7 +4,6 @@ $_SESSION['msgs']['record'] = array();
 $data = array();
 
 require_once("db_abstract.php");
-
 if (!empty($_POST['sub_type_id'])) {
   if (!preg_match('/^[0-9]+$/', $_POST['sub_type_id'])) {
     $_SESSION['msgs']['record'][] = "Please Contact IT.";
@@ -95,7 +94,7 @@ if($_POST['action_type'] === "update"){
 else{
   $layer->inserting($data, "daily_record");
 }
-header("location: index.php");
+header("location: start.php");
 exit;
 
 

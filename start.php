@@ -6,22 +6,20 @@ require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
   $user = new Users($_SESSION['daily']['user_id']);
-  $sub_types = $user ->getDailySubTypes();
+  $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
   $userImages = $user->getImageInfo();
-}
-else {
+} else {
   require_once("DailyExpense/UsersTemp.php");
   $usertemp = new UsersTemp(md5(get_client_ip_server()));
   $usertemp->CheckUser();
   $bool = $usertemp->getIsInSystem();
-  if($bool == false){
+  if ($bool == false) {
     require_once("db_abstract.php");
     $layer = new db_abstract_layer();
-    $data = array("user_id"=>'"'.$usertemp->getUserId().'"');
+    $data = array("user_id" => '"' . $usertemp->getUserId() . '"');
     $_SESSION['daily']['temp_user_id'] = $layer->inserting($data, "users_temp");
-  }
-  else
+  } else
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
   $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
   $sub_types = DailyExpense::getDailySubTypes();
@@ -50,6 +48,8 @@ $payments = DailyExpense::getPayments();
         apply the skin class to the body tag so the changes take effect.
   -->
   <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css"/>
+
+  <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -284,47 +284,80 @@ $payments = DailyExpense::getPayments();
   </section>
 
   <!-- Main content -->
-  <section class="content">
-    <div class="box box-info">
-      <div class="box-header">
-        <h3 class="box-title">Add a Expense</h3>
-      </div>
-      <div class="box-body">
-        <div class="row">
-          <div class="col-xs-2">
-            <input type="text" class="form-control" placeholder="Name" name="Name">
+
+  <div class="col-md-6">
+    <section class="content">
+      <form method="post" action="addRecord.php">
+        <div class="box box-info">
+          <div class="box-header">
+            <h3 class="box-title">Add a Expense</h3>
           </div>
-          <div class="col-xs-2">
-            <select class="form-control" id="general">
-              <?php
-                if(!empty($general)){
-                  foreach($general as $key => $value){
-                    echo '<option value="'.$value["id"].'">'.str_replace('_', ' ',$value["name"]).'</option>';
+          <div class="box-body">
+            <div class="row">
+              <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="Name" name="Name">
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" id="general">
+                  <?php
+                  if (!empty($general)) {
+                    foreach ($general as $key => $value) {
+                      echo '<option value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
+                    }
                   }
-                }
-              ?>
-            </select>
+                  ?>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <select class="form-control" id="sub_type" name="sub_type_id">
+                  <?php
+                  if (!empty($sub_types))
+                    foreach ($sub_types as $key => $value)
+                      echo '<option data="' . $value["supertypeid"] . '" value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
+                  ?>
+                </select>
+              </div>
+              <div class="col-xs-3">
+                <input type="text" name="date" class="form-control" id="date" placeholder="Date of Expense">
+              </div>
+            </div>
+            <br/>
+
+            <div class="row">
+              <div class="col-xs-3">
+                <input type="text" name="url" class="form-control" id="url" placeholder="URL">
+              </div>
+              <div class="col-xs-3">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                  <input type="text" class="form-control" name="amount">
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="Notes" name="notes">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-3">
+                <br/>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
           </div>
-          <div class="col-xs-2">
-            <select class="form-control" id="sub_type">
-              <?php
-              if(!empty($sub_types)){
-                foreach($sub_types as $key => $value){
-                  echo '<option data="'.$value["supertypeid"].'" value="'.$value["id"].'">'.str_replace('_', ' ',$value["name"]).'</option>';
-                }
-              }
-              ?>
-            </select>
-          </div>
+          <!-- /.box-body -->
         </div>
-      </div>
-      <!-- /.box-body -->
-    </div>
-  </section>
+        <?php
+        if(!empty($_SESSION['daily']['user_id']))
+          echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
+        else if(!empty(  $_SESSION['daily']['temp_user_id']))
+          echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
+        ?>
+      </form>
+    </section>
+  </div>
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
 <!-- Main Footer -->
 <footer class="main-footer">
   <!-- To the right -->
@@ -337,12 +370,10 @@ $payments = DailyExpense::getPayments();
 
 </div>
 <!-- ./wrapper -->
-
 <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="dist/js/app.min.js" type="text/javascript"></script>
 <script src="dist/js/daily.js" type="text/javascript"></script>
+<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 </body>
 </html>
-
-<?php

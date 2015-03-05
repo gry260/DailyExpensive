@@ -2,6 +2,7 @@
 session_start();
 require_once("DailyExpense/DailyExpense.php");
 require_once("DailyExpense/Users.php");
+require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
@@ -9,6 +10,7 @@ if (!empty($_SESSION['daily']['user_id'])) {
   $sub_types = $user ->getDailySubTypes();
   $userInfo = $user->getUserInfo();
   $userImages = $user->getImageInfo();
+  $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['user_id']);
 }
 else {
   require_once("DailyExpense/UsersTemp.php");
@@ -23,9 +25,12 @@ else {
   }
   else
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
+
+  $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['temp_user_id']);
   $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
   $sub_types = DailyExpense::getDailySubTypes();
 }
+
 
 $general = DailyExpense::getDailySuperTypes();
 $payments = DailyExpense::getPayments();
@@ -209,5 +214,17 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)) {
 <?php
 }
 ?>
+  <br />
+  <form method="post" action="addComments.php">
+    <input type="text" name="comments">
+    <?php
+    if(!empty($_SESSION['daily']['user_id']))
+      echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
+    else if(!empty(  $_SESSION['daily']['temp_user_id'])){
+      echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
+    }
+    ?>
+    <input type="submit" name="add_comments" />
+  </form>
 </body>
 </html>

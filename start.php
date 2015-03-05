@@ -364,6 +364,76 @@ $payments = DailyExpense::getPayments();
           echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
         ?>
       </form>
+      <div class="box box-success">
+        <div class="box-header ui-sortable-handle" style="cursor: move;">
+          <i class="fa fa-comments-o"></i>
+          <h3 class="box-title">Comments</h3>
+          <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+            <div class="btn-group" data-toggle="btn-toggle">
+              <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
+              <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
+            <!-- chat item -->
+            <div class="item">
+              <img src="dist/img/user4-128x128.jpg" alt="user image" class="online">
+              <p class="message">
+                <a href="#" class="name">
+                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
+                  Mike Doe
+                </a>
+                I would like to meet you to discuss the latest news about
+                the arrival of the new theme. They say it is going to be one the
+                best themes on the market
+              </p>
+              <div class="attachment">
+                <h4>Attachments:</h4>
+                <p class="filename">
+                  Theme-thumbnail-image.jpg
+                </p>
+                <div class="pull-right">
+                  <button class="btn btn-primary btn-sm btn-flat">Open</button>
+                </div>
+              </div><!-- /.attachment -->
+            </div><!-- /.item -->
+            <!-- chat item -->
+            <div class="item">
+              <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline">
+              <p class="message">
+                <a href="#" class="name">
+                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
+                  Alexander Pierce
+                </a>
+                I would like to meet you to discuss the latest news about
+                the arrival of the new theme. They say it is going to be one the
+                best themes on the market
+              </p>
+            </div><!-- /.item -->
+            <!-- chat item -->
+            <div class="item">
+              <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline">
+              <p class="message">
+                <a href="#" class="name">
+                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
+                  Susan Doe
+                </a>
+                I would like to meet you to discuss the latest news about
+                the arrival of the new theme. They say it is going to be one the
+                best themes on the market
+              </p>
+            </div><!-- /.item -->
+          </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 184.365781710914px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div><!-- /.chat -->
+        <div class="box-footer">
+          <div class="input-group">
+            <input class="form-control" placeholder="Type message...">
+            <div class="input-group-btn">
+              <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
   <div class="col-md-6">
@@ -373,16 +443,13 @@ $payments = DailyExpense::getPayments();
             <h3 class="box-title">Spending Records</h3>
           </div>
           <div class="box-body">
-            <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><div class="row"><div class="col-xs-6"><div id="example1_length" class="dataTables_length"><label><select size="1" name="example1_length" aria-controls="example1"><option value="10" selected="selected">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> records per page</label></div></div><div class="col-xs-6"><div class="dataTables_filter" id="example1_filter"><label>Search: <input type="text" aria-controls="example1"></label></div></div></div><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
                 <thead>
-                <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Rendering engine</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Browser</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Platform(s)</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Engine version</th>
-                  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">CSS </th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
+                <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Name</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Category</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Sub-Category</th>
+                  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Date</th>
+                  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Url</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
                   <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Notes</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Payment Type</th></tr>
                 </thead>
-                <tfoot>
-                <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1">CSS grade</th><th rowspan="1" colspan="1">Amount</th><th rowspan="1" colspan="1">Notes</th><th rowspan="1" colspan="1">Payment Type</th>
-                </tr>
-                </tfoot>
                 <tbody role="alert" aria-live="polite" aria-relevant="all">
                 <?php
                 if(!empty($records)){
@@ -400,7 +467,7 @@ $payments = DailyExpense::getPayments();
                   }
                 }
                 ?>
-                </tbody></table><div class="row"><div class="col-xs-6"><div class="dataTables_info" id="example1_info">Showing 1 to 10 of 57 entries</div></div><div class="col-xs-6"><div class="dataTables_paginate paging_bootstrap"><ul class="pagination"><li class="prev disabled"><a href="#">← Previous</a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li><a href="#">3</a></li><li><a href="#">4</a></li><li><a href="#">5</a></li><li class="next"><a href="#">Next → </a></li></ul></div></div></div></div>
+                </tbody></table></div>
           </div>
         </div>
       </section>
@@ -412,12 +479,10 @@ $payments = DailyExpense::getPayments();
 <footer class="main-footer">
   <!-- To the right -->
   <div class="pull-right hidden-xs">
-
   </div>
   <!-- Default to the left -->
   <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
 </footer>
-
 </div>
 <!-- ./wrapper -->
 <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
@@ -431,7 +496,6 @@ $payments = DailyExpense::getPayments();
 <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 <!-- FastClick -->
 <script src='plugins/fastclick/fastclick.min.js'></script>
-
 </body>
 </html>
 

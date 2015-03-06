@@ -1,13 +1,3 @@
-$( document ).ready(function() {
-    $('#general').Select({
-        "name": "#sub_type"
-    });
-    $('#date').datepicker({
-    });
-    $("#example1").dataTable();
-
-});
-
 
 (function ($) {
     $.fn.Select = function (options) {

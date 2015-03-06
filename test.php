@@ -56,7 +56,6 @@ $payments = DailyExpense::getPayments();
 
   <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css"/>
 
-
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -67,28 +66,83 @@ $payments = DailyExpense::getPayments();
 <body class="skin-blue">
 <div class="wrapper">
 
+<!-- Main Header -->
 <header class="main-header">
+
   <!-- Logo -->
   <a href="index2.html" class="logo"><b>Admin</b>LTE</a>
-  <!-- Header Navbar: style can be found in header.less -->
+
+  <!-- Header Navbar -->
   <nav class="navbar navbar-static-top" role="navigation">
     <!-- Sidebar toggle button-->
     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
       <span class="sr-only">Toggle navigation</span>
     </a>
-
+    <!-- Navbar Right Menu -->
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
         <!-- Messages: style can be found in dropdown.less-->
         <li class="dropdown messages-menu">
+          <!-- Menu toggle button -->
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-envelope-o"></i>
             <span class="label label-success">4</span>
           </a>
+          <ul class="dropdown-menu">
+            <li class="header">You have 4 messages</li>
+            <li>
+              <!-- inner menu: contains the messages -->
+              <ul class="menu">
+                <li><!-- start message -->
+                  <a href="#">
+                    <div class="pull-left">
+                      <!-- User Image -->
+                      <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                    </div>
+                    <!-- Message title and timestamp -->
+                    <h4>
+                      Support Team
+                      <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                    </h4>
+                    <!-- The message -->
+                    <p>Why not buy a new awesome theme?</p>
+                  </a>
+                </li>
+                <!-- end message -->
+              </ul>
+              <!-- /.menu -->
+            </li>
+            <li class="footer"><a href="#">See All Messages</a></li>
+          </ul>
         </li>
+        <!-- /.messages-menu -->
 
-        <!-- Tasks: style can be found in dropdown.less -->
+        <!-- Notifications Menu -->
+        <li class="dropdown notifications-menu">
+          <!-- Menu toggle button -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-bell-o"></i>
+            <span class="label label-warning">10</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="header">You have 10 notifications</li>
+            <li>
+              <!-- Inner Menu: contains the notifications -->
+              <ul class="menu">
+                <li><!-- start notification -->
+                  <a href="#">
+                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                  </a>
+                </li>
+                <!-- end notification -->
+              </ul>
+            </li>
+            <li class="footer"><a href="#">View all</a></li>
+          </ul>
+        </li>
+        <!-- Tasks Menu -->
         <li class="dropdown tasks-menu">
+          <!-- Menu Toggle Button -->
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-flag-o"></i>
             <span class="label label-danger">9</span>
@@ -96,63 +150,21 @@ $payments = DailyExpense::getPayments();
           <ul class="dropdown-menu">
             <li class="header">You have 9 tasks</li>
             <li>
-              <!-- inner menu: contains the actual data -->
+              <!-- Inner menu: contains the tasks -->
               <ul class="menu">
                 <li><!-- Task item -->
                   <a href="#">
+                    <!-- Task title and progress text -->
                     <h3>
                       Design some buttons
                       <small class="pull-right">20%</small>
                     </h3>
+                    <!-- The progress bar -->
                     <div class="progress xs">
+                      <!-- Change the css width attribute to simulate progress -->
                       <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
                         <span class="sr-only">20% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Create a nice theme
-                      <small class="pull-right">40%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">40% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Some task I need to do
-                      <small class="pull-right">60%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">60% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Make beautiful transitions
-                      <small class="pull-right">80%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">80% Complete</span>
                       </div>
                     </div>
                   </a>
@@ -165,14 +177,17 @@ $payments = DailyExpense::getPayments();
             </li>
           </ul>
         </li>
-        <!-- User Account: style can be found in dropdown.less -->
+        <!-- User Account Menu -->
         <li class="dropdown user user-menu">
+          <!-- Menu Toggle Button -->
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <!-- The user image in the navbar-->
             <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
+            <!-- hidden-xs hides the username on small devices so only the image appears. -->
             <span class="hidden-xs">Alexander Pierce</span>
           </a>
           <ul class="dropdown-menu">
-            <!-- User image -->
+            <!-- The user image in the menu -->
             <li class="user-header">
               <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
 
@@ -261,116 +276,116 @@ $payments = DailyExpense::getPayments();
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-      Dashboard
-      <small>Control panel</small>
-    </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Dashboard</li>
-    </ol>
-  </section>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    Page Header
+    <small>Optional description</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+    <li class="active">Here</li>
+  </ol>
+</section>
 
-  <!-- Main row -->
-  <div class="col-md-6">
-    <!-- Main content -->
-    <section class="content">
+<!-- Main content -->
 
-      <form method="post" action="addRecord.php">
-        <div class="box box-info">
-          <div class="box-header">
-            <h3 class="box-title">Add a Expense</h3>
-          </div>
-          <div class="box-body">
-            <div class="row">
-              <div class="col-xs-3">
-                <input type="text" class="form-control" placeholder="Name" name="Name">
-              </div>
-              <div class="col-xs-3">
-                <select class="form-control" id="general">
-                  <?php
-                  if (!empty($general)) {
-                    foreach ($general as $key => $value) {
-                      echo '<option value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
-                    }
-                  }
-                  ?>
-                </select>
-              </div>
-              <div class="col-xs-3">
-                <select class="form-control" id="sub_type" name="sub_type_id">
-                  <?php
-                  if (!empty($sub_types))
-                    foreach ($sub_types as $key => $value)
-                      echo '<option data="' . $value["supertypeid"] . '" value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
-                  ?>
-                </select>
-              </div>
-              <div class="col-xs-3">
-                <input type="text" name="date" class="form-control" id="date" placeholder="Date of Expense">
-              </div>
+<div class="col-md-6">
+
+  <section class="content">
+    <form method="post" action="addRecord.php">
+      <div class="box box-info">
+        <div class="box-header">
+          <h3 class="box-title">Add a Expense</h3>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-3">
+              <input type="text" class="form-control" placeholder="Name" name="Name">
             </div>
-            <br/>
-
-            <div class="row">
-              <div class="col-xs-3">
-                <input type="text" name="url" class="form-control" id="url" placeholder="URL">
-              </div>
-              <div class="col-xs-3">
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                  <input type="text" class="form-control" name="amount">
-                </div>
-              </div>
-              <div class="col-xs-3">
-                <input type="text" class="form-control" placeholder="Notes" name="notes">
-              </div>
-              <div class="col-xs-3">
+            <div class="col-xs-3">
+              <select class="form-control" id="general">
                 <?php
-                echo '<select name="payment_type_id" class="form-control">';
-                if (!empty($payments)) {
-                  foreach ($payments as $value) {
-                    echo '<option value="' . $value["id"] . '">' . $value["name"] . '</option>';
+                if (!empty($general)) {
+                  foreach ($general as $key => $value) {
+                    echo '<option value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
                   }
                 }
-                echo '</select>';
                 ?>
-              </div>
+              </select>
             </div>
-            <div class="row">
-              <div class="col-xs-3">
-                <br/>
-                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-              </div>
+            <div class="col-xs-3">
+              <select class="form-control" id="sub_type" name="sub_type_id">
+                <?php
+                if (!empty($sub_types))
+                  foreach ($sub_types as $key => $value)
+                    echo '<option data="' . $value["supertypeid"] . '" value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
+                ?>
+              </select>
+            </div>
+            <div class="col-xs-3">
+              <input type="text" name="date" class="form-control" id="date" placeholder="Date of Expense">
             </div>
           </div>
-          <!-- /.box-body -->
+          <br/>
+
+          <div class="row">
+            <div class="col-xs-3">
+              <input type="text" name="url" class="form-control" id="url" placeholder="URL">
+            </div>
+            <div class="col-xs-3">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="text" class="form-control" name="amount">
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <input type="text" class="form-control" placeholder="Notes" name="notes">
+            </div>
+            <div class="col-xs-3">
+              <?php
+              echo '<select name="payment_type_id" class="form-control">';
+              if (!empty($payments)) {
+                foreach ($payments as $value) {
+                  echo '<option value="' . $value["id"] . '">' . $value["name"] . '</option>';
+                }
+              }
+              echo '</select>';
+              ?>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">
+              <br/>
+              <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
         </div>
-        <?php
-        if(!empty($_SESSION['daily']['user_id']))
-          echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
-        else if(!empty(  $_SESSION['daily']['temp_user_id']))
-          echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
-        ?>
-      </form>
-      <!-- Small boxes (Stat box) -->
-
-      <!-- Left col -->
-      <section class="col-lg-7 connectedSortable">
-        <!-- Chat box -->
-        <div class="box box-success">
-          <div class="box-header">
-            <i class="fa fa-comments-o"></i>
-
-            <h3 class="box-title">Comments</h3>
+        <!-- /.box-body -->
+      </div>
+      <?php
+      if(!empty($_SESSION['daily']['user_id']))
+        echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
+      else if(!empty(  $_SESSION['daily']['temp_user_id']))
+        echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
+      ?>
+    </form>
+    <div class="box box-success">
+      <div class="box-header ui-sortable-handle" style="cursor: move;">
+        <i class="fa fa-comments-o"></i>
+        <h3 class="box-title">Comments</h3>
+        <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+          <div class="btn-group" data-toggle="btn-toggle">
+            <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
+            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
           </div>
-          <div class="box-body chat" id="chat-box">
+        </div>
+      </div>
+      <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
+          <div class="box-body chat" id="chat-box" style="overflow: hidden; width: auto; height: 250px;">
             <!-- chat item -->
             <div class="item">
-              <img src="dist/img/user4-128x128.jpg" alt="user image" class="online"/>
-
+              <img src="dist/img/user4-128x128.jpg" alt="user image" class="online">
               <p class="message">
                 <a href="#" class="name">
                   <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
@@ -382,22 +397,17 @@ $payments = DailyExpense::getPayments();
               </p>
               <div class="attachment">
                 <h4>Attachments:</h4>
-
                 <p class="filename">
                   Theme-thumbnail-image.jpg
                 </p>
-
                 <div class="pull-right">
                   <button class="btn btn-primary btn-sm btn-flat">Open</button>
                 </div>
-              </div>
-              <!-- /.attachment -->
-            </div>
-            <!-- /.item -->
+              </div><!-- /.attachment -->
+            </div><!-- /.item -->
             <!-- chat item -->
             <div class="item">
-              <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline"/>
-
+              <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline">
               <p class="message">
                 <a href="#" class="name">
                   <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
@@ -407,12 +417,10 @@ $payments = DailyExpense::getPayments();
                 the arrival of the new theme. They say it is going to be one the
                 best themes on the market
               </p>
-            </div>
-            <!-- /.item -->
+            </div><!-- /.item -->
             <!-- chat item -->
             <div class="item">
-              <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline"/>
-
+              <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline">
               <p class="message">
                 <a href="#" class="name">
                   <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
@@ -422,46 +430,39 @@ $payments = DailyExpense::getPayments();
                 the arrival of the new theme. They say it is going to be one the
                 best themes on the market
               </p>
-            </div>
-            <!-- /.item -->
+            </div><!-- /.item -->
           </div>
-          <!-- /.chat -->
-          <div class="box-footer">
-            <div class="input-group">
-              <input class="form-control" placeholder="Type message..."/>
-
-              <div class="input-group-btn">
-                <button class="btn btn-success"><i class="fa fa-plus"></i></button>
-              </div>
-            </div>
+        </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 184px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div><!-- /.chat -->
+      <div class="box-footer">
+        <div class="input-group">
+          <input class="form-control" placeholder="Type message...">
+          <div class="input-group-btn">
+            <button class="btn btn-success"><i class="fa fa-plus"></i></button>
           </div>
         </div>
-        <!-- /.box (chat box) -->
-
-
-        <!-- /.box -->
-      </section>
-  </div>
-  <!-- /.Left col -->
-  <div class="col-md-6">
-    <section class="content">
-      <div class="box box-info">
-        <div class="box-header">
-          <h3 class="box-title">Spending Records</h3>
-        </div>
-        <div class="box-body">
-          <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
-              <thead>
-              <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Name</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Category</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Sub-Category</th>
-                <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Date</th>
-                <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Url</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
-                <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Notes</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Payment Type</th></tr>
-              </thead>
-              <tbody role="alert" aria-live="polite" aria-relevant="all">
-              <?php
-              if(!empty($records)){
-                foreach($records as $key => $value){
-                  echo '<tr class="even">
+      </div>
+    </div>
+  </section>
+</div>
+<div class="col-md-6">
+  <section class="content">
+    <div class="box box-info">
+      <div class="box-header">
+        <h3 class="box-title">Spending Records</h3>
+      </div>
+      <div class="box-body">
+        <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
+            <thead>
+            <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Name</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Category</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Sub-Category</th>
+              <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Date</th>
+              <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Url</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
+              <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Notes</th>  <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Payment Type</th></tr>
+            </thead>
+            <tbody role="alert" aria-live="polite" aria-relevant="all">
+            <?php
+            if(!empty($records)){
+              foreach($records as $key => $value){
+                echo '<tr class="even">
                     <td>'.$value->getName().'</td>
                     <td>'.$value->getCategory().'</td>
                     <td>'.$value->getsubName().'</td>
@@ -471,29 +472,27 @@ $payments = DailyExpense::getPayments();
                     <td>'.$value->getNote().'</td>
                     <td>'.$value->getNote().'</td>
                     </tr>';
-                }
               }
-              ?>
-              </tbody></table></div>
-        </div>
+            }
+            ?>
+            </tbody></table></div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </div>
-<!-- /.row (main row) -->
-
-</section><!-- /.content -->
+<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<!-- Main Footer -->
 <footer class="main-footer">
+  <!-- To the right -->
   <div class="pull-right hidden-xs">
-    <b>Version</b> 2.0
   </div>
-  <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-  reserved.
+  <!-- Default to the left -->
+  <strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.
 </footer>
-</div><!-- ./wrapper -->
-
+</div>
+<!-- ./wrapper -->
 <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="dist/js/app.min.js" type="text/javascript"></script>
@@ -501,8 +500,9 @@ $payments = DailyExpense::getPayments();
 <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 <script src="plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="plugins/datatables/dataTables.bootstrap.js" type="text/javascript"></script>
+<!-- FastClick -->
 <script src='plugins/fastclick/fastclick.min.js'></script>
 <script src="dist/js/pages/dashboard.js" type="text/javascript"></script>
-<script src="dist/js/daily.js" type="text/javascript"></script>
 </body>
 </html>
+

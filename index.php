@@ -25,13 +25,10 @@ else {
   }
   else
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
-
   $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['temp_user_id']);
   $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
   $sub_types = DailyExpense::getDailySubTypes();
 }
-
-
 $general = DailyExpense::getDailySuperTypes();
 $payments = DailyExpense::getPayments();
 ?>

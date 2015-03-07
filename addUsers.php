@@ -122,7 +122,7 @@ if(!empty($_POST['update_user'])){
 }
 else if (!empty($data)) {
   $lastId = $layer->inserting($data, "users");
-  $upd = array('user_id'=>$lastId);
+  $upd = array('user_id'=>$lastId, "is_temp"=>'null');
   $where = array("user_id"=>$data["temp_user_id"], " and is_temp"=> "'1'");
   $layer->updating($upd, "daily_record", $where);
 }
@@ -145,7 +145,7 @@ if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image'])) {
   $lastId = $layer->inserting($data, "profileimages");
 }
 
-header("Location: index.php");
+header("Location: start.php");
 exit;
 
 ?>

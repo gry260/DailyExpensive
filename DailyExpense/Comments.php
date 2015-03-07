@@ -2,6 +2,7 @@
 
 class Comments
 {
+  private $_user_name;
   private $_user_id;
   private $_comments;
   private $_date_time;
@@ -14,12 +15,18 @@ class Comments
       if(!empty($data["date_time"])) $this->_date_time = $data["date_time"];
       if(!empty($data["comments"])) $this->_comments = $data["comments"];
       if(!empty($data["is_temp"])) $this->_istemp = $data["is_temp"];
+      if(!empty($data["username"])) $this->_user_name = $data["username"];
     }
   }
 
   public static function generateObjects($user_id)
   {
     return new Comments($user_id);
+  }
+
+  public function getUserName()
+  {
+    return $this->_user_name;
   }
 
   public function getUserId()
@@ -45,7 +52,11 @@ class Comments
   public static function getCommentsPerUser($user_id)
   {
     global $pdo_dbh;
-    $q = ' select * from sandbox.comments c where user_id = ' . $user_id;
+    $q = ' select *, concat(u.lastname, ", ", u.firstname) as username,
+    DATE_FORMAT(date_time,"%b %d %Y %h:%i %p") as date_time
+    from sandbox.comments c left join sandbox.users u on u.id = c.user_id where user_id = ' . $user_id.'
+     order by date_time desc';
+
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

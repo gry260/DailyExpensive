@@ -49,7 +49,7 @@ if($rowCount > 0){
   $result = $statment->fetch(PDO::FETCH_ASSOC);
   $_SESSION['daily']['login'] = true;
   $_SESSION['daily']['user_id'] = $result["id"];
-  header("Location:index.php");
+  header("Location:start.php");
   exit;
 }
 else

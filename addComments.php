@@ -28,12 +28,16 @@ else
 
 $data["date_time"] = '"'.date('Y-m-d H:i:s').'"';
 
+
 require_once("db_abstract.php");
 $layer = new db_abstract_layer();
 
-if(!empty($_POST['add_comments'])){
+if(!empty($data)){
   $lastId = $layer->inserting($data, "comments");
 }
+
+header("location: start.php");
+exit;
 
 
 

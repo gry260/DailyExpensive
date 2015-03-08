@@ -79,129 +79,79 @@ $payments = DailyExpense::getPayments();
 
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-        <!-- Messages: style can be found in dropdown.less-->
-        <li class="dropdown messages-menu">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-envelope-o"></i>
-            <span class="label label-success">4</span>
-          </a>
-        </li>
 
-        <!-- Tasks: style can be found in dropdown.less -->
-        <li class="dropdown tasks-menu">
+        <!-- User Account: style can be found in dropdown.less -->
+        <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-flag-o"></i>
-            <span class="label label-danger">9</span>
+            <span class="hidden-xs" class="">
+              <button class="btn btn-block btn-warning btn-flat">Register</button>
+            </span>
           </a>
           <ul class="dropdown-menu">
-            <li class="header">You have 9 tasks</li>
-            <li>
-              <!-- inner menu: contains the actual data -->
-              <ul class="menu">
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Design some buttons
-                      <small class="pull-right">20%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">20% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Create a nice theme
-                      <small class="pull-right">40%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">40% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Some task I need to do
-                      <small class="pull-right">60%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">60% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-                <li><!-- Task item -->
-                  <a href="#">
-                    <h3>
-                      Make beautiful transitions
-                      <small class="pull-right">80%</small>
-                    </h3>
-                    <div class="progress xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar"
-                           aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                        <span class="sr-only">80% Complete</span>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <!-- end task item -->
-              </ul>
+            <!-- Menu Body -->
+            <li class="user-body">
+              <form action="addUsers.php" method="POST" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>First Name:</label>
+                <input type="text" class="form-control" name="firstname" placeholder="Enter first name...">
+              </div>
+              <div class="form-group">
+                <label>Last Name:</label>
+                <input type="text" class="form-control" name="lastname" placeholder="Enter last name...">
+              </div>
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="text" class="form-control" name="email" placeholder="Enter email...">
+              </div>
+              <div class="form-group">
+                <label>Password:</label>
+                <input type="password" class="form-control" name="password" placeholder="Enter password...">
+              </div>
+              <div class="form-group">
+                <label>Confirm Password:</label>
+                <input type="password" class="form-control" name="confirm_password" placeholder="Confirm password...">
+              </div>
+              <div class="form-group">
+                <label>Profile Image:</label>
+                <input type="file" name="profile_image"/>
+              </div>
+              <input type="hidden" name="temp_user_id" value="<?php echo $_SESSION['daily']['temp_user_id']; ?>"/>
             </li>
-            <li class="footer">
-              <a href="#">View all tasks</a>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+              <div class="pull-right">
+                <button type="submit" class="btn btn-primary">Register</button>
+              </div>
             </li>
+            </form>
           </ul>
         </li>
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-            <span class="hidden-xs">Alexander Pierce</span>
+            <span class="hidden-xs"><button class="btn btn-block btn-success">Sign In</button></span>
           </a>
           <ul class="dropdown-menu">
-            <!-- User image -->
-            <li class="user-header">
-              <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
-
-              <p>
-                Alexander Pierce - Web Developer
-                <small>Member since Nov. 2012</small>
-              </p>
-            </li>
             <!-- Menu Body -->
+
             <li class="user-body">
-              <div class="col-xs-4 text-center">
-                <a href="#">Followers</a>
+              <form action="login.php" method="POST">
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="text" class="form-control" name="email" placeholder="Enter Email...">
               </div>
-              <div class="col-xs-4 text-center">
-                <a href="#">Sales</a>
-              </div>
-              <div class="col-xs-4 text-center">
-                <a href="#">Friends</a>
+              <div class="form-group">
+                <label>Password:</label>
+                <input type="password" class="form-control" name="password"  placeholder="Enter Password...">
               </div>
             </li>
             <!-- Menu Footer-->
             <li class="user-footer">
-              <div class="pull-left">
-                <a href="#" class="btn btn-default btn-flat">Profile</a>
-              </div>
               <div class="pull-right">
-                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                <button class="btn btn-block btn-info">Login</button>
               </div>
             </li>
+            </form>
           </ul>
         </li>
       </ul>
@@ -368,73 +318,45 @@ $payments = DailyExpense::getPayments();
           </div>
           <div class="box-body chat" id="chat-box">
             <!-- chat item -->
-            <div class="item">
-              <img src="dist/img/user4-128x128.jpg" alt="user image" class="online"/>
-
-              <p class="message">
-                <a href="#" class="name">
-                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
-                  Mike Doe
-                </a>
-                I would like to meet you to discuss the latest news about
-                the arrival of the new theme. They say it is going to be one the
-                best themes on the market
-              </p>
-              <div class="attachment">
-                <h4>Attachments:</h4>
-
-                <p class="filename">
-                  Theme-thumbnail-image.jpg
-                </p>
-
-                <div class="pull-right">
-                  <button class="btn btn-primary btn-sm btn-flat">Open</button>
-                </div>
-              </div>
-              <!-- /.attachment -->
-            </div>
-            <!-- /.item -->
-            <!-- chat item -->
-            <div class="item">
-              <img src="dist/img/user3-128x128.jpg" alt="user image" class="offline"/>
-
-              <p class="message">
-                <a href="#" class="name">
-                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
-                  Alexander Pierce
-                </a>
-                I would like to meet you to discuss the latest news about
-                the arrival of the new theme. They say it is going to be one the
-                best themes on the market
-              </p>
-            </div>
-            <!-- /.item -->
-            <!-- chat item -->
-            <div class="item">
+            <?php
+            if(!empty($user_comments)){
+              foreach($user_comments as $comment){
+                echo '  <div class="item">
               <img src="dist/img/user2-160x160.jpg" alt="user image" class="offline"/>
-
               <p class="message">
                 <a href="#" class="name">
-                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
-                  Susan Doe
-                </a>
-                I would like to meet you to discuss the latest news about
-                the arrival of the new theme. They say it is going to be one the
-                best themes on the market
+                  <small class="text-muted pull-right"><i class="fa fa-clock-o"></i>'.$comment->getDateTime().'</small>
+                  '.$comment->getUserName().'
+                </a>'.urldecode($comment->getComments()).'
               </p>
-            </div>
+            </div>';
+              }
+            }
+            ?>
             <!-- /.item -->
           </div>
           <!-- /.chat -->
-          <div class="box-footer">
-            <div class="input-group">
-              <input class="form-control" placeholder="Type message..."/>
 
-              <div class="input-group-btn">
-                <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+          <form method="post" action="addComments.php">
+            <?php
+            if(!empty($_SESSION['daily']['user_id'])){
+              echo '<input type="hidden" name="user_id" value="'.$_SESSION['daily']['user_id'].'"/>';
+              echo '';
+            }
+            else if(!empty(  $_SESSION['daily']['temp_user_id'])){
+              echo '<input type="hidden" name="temp_user_id" value="'. $_SESSION['daily']['temp_user_id'].'"/>';
+            }
+            ?>
+            <div class="box-footer">
+              <div class="input-group">
+                <input class="form-control" placeholder="Type message..." name="comments"/>
+
+                <div class="input-group-btn">
+                  <button class="btn btn-success" type="submit" name="add_comments"><i class="fa fa-plus"></i></button>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
         <!-- /.box (chat box) -->
 

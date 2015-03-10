@@ -29,6 +29,12 @@ if(!empty($_GET['file_path'])) {
         echo $contents;
         exit;
     }
+    else{
+        $contents = file_get_contents("dist/img/avatar5.png");
+        header('Content-type: png');
+        echo $contents;
+        exit;
+    }
 }
 
 

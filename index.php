@@ -11,6 +11,7 @@ if (!empty($_SESSION['daily']['user_id'])) {
   $userInfo = $user->getUserInfo();
   $userImages = $user->getImageInfo();
   $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['user_id']);
+  $file_path = urlencode('files/profileimages/' . $_SESSION['daily']['user_id'] . '/' . $userImages['imageName']);
 }
 else {
   require_once("DailyExpense/UsersTemp.php");
@@ -174,7 +175,6 @@ if(!empty($_SESSION['daily']['user_id']) && !empty($userInfo)) {
       echo '</select>';
       ?>
       <input type="text" name="name"/>
-
       <input type="hidden" name="user_id" value="<?php echo $userInfo["id"]; ?>"/>
       <input type="submit"/>
     </form>

@@ -58,6 +58,11 @@ if (!empty($_POST['id'])) {
 }
 
 
+if (!empty($_POST['name'])) {
+  $data["name"] = '"'.htmlentities($_POST['name'], ENT_QUOTES).'"';
+}
+
+
 if (!empty($_POST['notes'])) {
   $data["notes"] = '"'.htmlentities($_POST['notes'], ENT_QUOTES).'"';
 }

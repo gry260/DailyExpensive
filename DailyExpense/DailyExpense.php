@@ -21,7 +21,7 @@ abstract class DailyExpense
   public static function generateObjects($user_id, $isTemp)
   {
     global $pdo_dbh;
-    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
+    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%M %d, %y") as date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
     from sandbox.daily_record d
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
@@ -30,7 +30,7 @@ abstract class DailyExpense
       $q .= ' and d.is_temp = "1"';
     $q .= '
     union
-select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, d.date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
+select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%m %d, %y") as date, d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
 from sandbox.users u
 left join sandbox.users_temp temp on u.temp_user_id = temp.id
 left join sandbox.daily_record d on d.user_id = temp.id
@@ -42,7 +42,8 @@ where u.';
     else
       $q .= 'id=';
 
-    $q .= $user_id . ' and d.is_temp = "1"';
+    $q .= $user_id . ' and d.is_temp = "1"
+    order by date desc';
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

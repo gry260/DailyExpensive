@@ -10,6 +10,7 @@ require_once("misFunctions.php");
 require_once("db_abstract.php");
 $layer = new db_abstract_layer();
 
+
 $_SESSION['msgs']['user'] = array();
 $data = array();
 if (!empty($_POST["firstname"])) {
@@ -107,6 +108,7 @@ if(!empty($_POST['add_user'])) {
   }
 }
 
+
 if(!empty($_POST['update_user'])){
   if (!empty($_POST['user_id'])) {
     if (!preg_match('/^[0-9]+$/', $_POST['user_id'])) {
@@ -122,11 +124,14 @@ if(!empty($_POST['update_user'])){
 }
 else if (!empty($data)) {
   $lastId = $layer->inserting($data, "users");
+  $_SESSION['daily']['user_id']  = $lastId;
   $upd = array('user_id'=>$lastId, "is_temp"=>'null');
   $where = array("user_id"=>$data["temp_user_id"], " and is_temp"=> "'1'");
   $layer->updating($upd, "daily_record", $where);
-}
-if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image'])) {
+  $layer->updating($upd, "comments", $where);
+};
+
+if (!empty($_FILES['profile_image']) && is_array($_FILES['profile_image']) && !empty($_FILES['profile_image']['name'])) {
   $ext = pathinfo($file_info['file_info']['name'], PATHINFO_EXTENSION);
   $current_date = time();
   $received_date = date('Y-m-d H:i:s');

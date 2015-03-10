@@ -14,15 +14,18 @@ $_SESSION['msgs']['subtype'] = array();
 $data = array();
 
 if (!empty($_POST["name"])) {
-    $allowedChars = array('_');
+    $allowedChars = array('_', ' ');
     $chkSpChar = valUserData($_POST['name'], $allowedChars);
     if ($chkSpChar !== true) {
         $_SESSION['msgs']["user"][] = 'Your sub type contains invalid characters.
 		    Please remove the following characters: ' . trim($chkSpChar);
     } else {
         $file = ucfirst($_POST["name"]).'.php';
-        $class = $_POST["name"];
+        $file = str_replace(' ','_', $file);
+        $class = ucfirst($_POST["name"]);
+        $class = str_replace(' ','_', $class);
         $data["name"] = '"' . ucfirst($_POST['name']) . '"';
+        $data["name"] = str_replace(' ','_', $data["name"]);
     }
 
 } else
@@ -74,7 +77,7 @@ if (!empty($lastId)) {
         fclose($handle);
     }
 }
-header("Location:index.php");
+header("Location:start.php");
 exit;
 
 ?>

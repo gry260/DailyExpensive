@@ -32,7 +32,26 @@
            }
            selObj.sumo.init();
         });
-
-
     };
+
+    $.fn.editRecord = function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init: function(){
+                    var that = this;
+                    $selObj = $(selObj);
+                    $selObj.click(function() {
+                        $prev = $(this).prev().val();
+                        console.log($prev);
+                    });
+                }
+            }
+            selObj.sumo.init();
+        });
+
+    }
 }(jQuery));

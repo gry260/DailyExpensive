@@ -6,6 +6,7 @@ require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
+  echo 'asdf';
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -286,6 +287,8 @@ $payments = DailyExpense::getPayments();
                    <h3 class="timeline-header"><a href="#.">Support Team</a> ..</h3>';
                   echo '<div class="row" style="padding:15px;">';
                   foreach($eachDate as $vv){
+                    $encode["sub_type_id"] = $vv->getSubTypeID();
+                    $encode["amount"] = $vv->getAmount();
                     echo '
                     <div class="col-lg-3" style="margin-bottom: 15px;">
                      <div class="timeline-body">
@@ -296,32 +299,31 @@ $payments = DailyExpense::getPayments();
                         </div>
                        <div class="product-img">
                         <img src="http://placehold.it/50x50/d2d6de/ffffff" alt="Product Image">
-
                       </div>
-
-
                       <div class="product-info">';
                        $name = $vv->getName();
                         if(!empty($name)){
-                          echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">'.$name.'asdf</h4>';
+                          $encode["name"] = $name;
+                          echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">'.$name.'</h4>';
                         }
-                               echo '';
                         $note = $vv->getNote();
                         if(!empty($note)){
+                          $encode["note"] = $note;
                           echo '<span class="product-description">
                           '.$vv->getNote().'
                         </span><br />';
                         }
                         $url = $vv->getUrl();
                         if(!empty($url)){
+                          $encode["url"] = $url;
                           echo '
-                          <span class="product-description">
-                    '.$vv->getUrl().'
+                          <span class="product-url">'.$vv->getUrl().'
                         </span>
                         <br />';
                         }
-                        echo '
-                  <button class="btn btn-danger btn-sm">Edit</button>
+                        echo "
+                    <input type='hidden' value='".json_encode($encode)."' name='each_record'/>";
+                  echo '<button class="btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
                       </div>
                      </div>
                      </div>';
@@ -360,6 +362,8 @@ $payments = DailyExpense::getPayments();
 
   <script src="dist/js/jquery.popupoverlay.js"></script>
 
+  <script src="dist/js/daily.js"></script>
+
   <script>
     $(document).ready(function () {
       $('#slide').popup({
@@ -367,6 +371,8 @@ $payments = DailyExpense::getPayments();
         outline: true,
         vertical: 'top'
       });
+      $(".edit_record").editRecord();
+
 
     });
   </script>

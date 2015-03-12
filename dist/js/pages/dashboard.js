@@ -8,10 +8,9 @@
 
 $(function () {
   //SLIMSCROLL FOR CHAT WIDGET
-    $('#chat-box').slimScroll({
-        height: '250px'
-    });
+    $('#chat-box').slimScroll({height: '250px'});
     $('#general').Select({"name": "#sub_type"});
     $('#date').datepicker({});
     $("#example1").dataTable();
+
 });

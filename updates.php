@@ -51,6 +51,8 @@ $payments = DailyExpense::getPayments();
     <!-- Ionicons -->
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
+
+    <link href="plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
@@ -271,7 +273,39 @@ $payments = DailyExpense::getPayments();
       <div class="pad margin no-print">
         <div class="callout callout-info" style="margin-bottom: 0!important;">
           <h4><i class="fa fa-info"></i> Note:</h4>
-          <select><option>fasdf</option></select>
+          <div class="row">
+            <div class="col-lg-2">
+              <select class="form-control"><option>Sub Cate</option></select>
+            </div>
+            <div class="col-lg-2">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="text" class="form-control" placeholder="Min Price">
+              </div>
+             </div>
+            <div class="col-lg-2">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="text" class="form-control" placeholder="Max Price">
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="input-group">
+                <button class="btn btn-default pull-right" style="width:186px;" id="daterange-btn">
+                  <i class="fa fa-calendar"></i> Date range picker
+                  <i class="fa fa-caret-down"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search"><span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <ul class="timeline">
@@ -433,6 +467,8 @@ $payments = DailyExpense::getPayments();
 
   <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
 
+  <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+
   <script src="dist/js/daily.js"></script>
 
   <script>
@@ -446,6 +482,23 @@ $payments = DailyExpense::getPayments();
       $('#date').datepicker({
       });
       $('#general').Select({"name": "#sub_type"});
+      $('#daterange-btn').daterangepicker(
+        {
+          ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+            'Last 7 Days': [moment().subtract('days', 6), moment()],
+            'Last 30 Days': [moment().subtract('days', 29), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+          },
+          startDate: moment().subtract('days', 29),
+          endDate: moment()
+        },
+        function (start, end) {
+          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+      );
     });
   </script>
 

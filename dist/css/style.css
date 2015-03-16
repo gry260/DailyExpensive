@@ -28,3 +28,7 @@
     -ms-transform: translateX(0) translateY(0);
     transform: translateX(0) translateY(0);
 }
+
+.datepicker{
+    z-index: 9999999 !important;
+}

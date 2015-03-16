@@ -249,7 +249,12 @@ $payments = DailyExpense::getPayments();
   <div class="col-md-6">
     <!-- Main content -->
     <section class="content" style="padding-left: 0px; padding-right: 0px;">
-
+      <?php
+      if (!empty($sub_types)) {
+        echo "<input type='hidden' value='".json_encode($sub_types)."' id='sub_types'/>";
+      }
+          //echo '<option data="' . $value["supertypeid"] . '" value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
+      ?>
       <form method="post" action="addRecord.php">
         <div class="box box-info">
           <div class="box-header">
@@ -273,18 +278,11 @@ $payments = DailyExpense::getPayments();
               </div>
               <div class="col-xs-4">
                 <select class="form-control" id="sub_type" name="sub_type_id">
-                  <?php
-                  if (!empty($sub_types))
-                    foreach ($sub_types as $key => $value)
-                      echo '<option data="' . $value["supertypeid"] . '" value="' . $value["id"] . '">' . str_replace('_', ' ', $value["name"]) . '</option>';
-                  ?>
                 </select>
               </div>
             </div>
             <br/>
-
             <div class="row">
-
               <div class="col-xs-3">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-dollar"></i></span>

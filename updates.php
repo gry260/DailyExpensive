@@ -6,7 +6,6 @@ require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
-  echo 'asdf';
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -266,15 +265,21 @@ $payments = DailyExpense::getPayments();
         Update Your Profile
       </h1>
     </section>
+
     <!-- Main content -->
     <section class="content">
+      <div class="pad margin no-print">
+        <div class="callout callout-info" style="margin-bottom: 0!important;">
+          <h4><i class="fa fa-info"></i> Note:</h4>
+          <select><option>fasdf</option></select>
+        </div>
+      </div>
       <ul class="timeline">
         <?php
         if(!empty($records)){
           $res = array();
           foreach($records as $value)
             $res[$value->getDate()][] = $value;
-
           if(!empty($res)){
             foreach($res as $key => $eachDate){
               echo '<li class="time-label">
@@ -290,7 +295,7 @@ $payments = DailyExpense::getPayments();
                     $encode["sub_type_id"] = $vv->getSubTypeID();
                     $encode["amount"] = $vv->getAmount();
                     echo '
-                    <div class="col-lg-3" style="margin-bottom: 15px;">
+                    <div class="col-lg-2" style="margin-bottom: 15px;">
                      <div class="timeline-body">
                      <div class="product-info">
                         <a href="javascript::;" class="product-title">'.$vv->getSubName().'
@@ -321,9 +326,13 @@ $payments = DailyExpense::getPayments();
                         </span>
                         <br />';
                         }
+                        $encode["id"] = $vv->getRecordID();
+                        $encode["date"] = gmdate("m/d/Y", strtotime($vv->getDate())+3600);
+                        $encode["super_type_id"] = $vv->getSuperID();
+                        $encode["payment_type_id"] = $vv->getPaymentID();
                         echo "
                     <input type='hidden' value='".json_encode($encode)."' name='each_record'/>";
-                  echo '<button class="btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
+                  echo '<button class="slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
                       </div>
                      </div>
                      </div>';
@@ -349,6 +358,66 @@ $payments = DailyExpense::getPayments();
   </footer>
 
   </div>
+
+  <div id="slide" class="well" style="width: 600px;">
+    <?php
+      if (!empty($sub_types)) {
+        echo "<input type='hidden' value='".json_encode($sub_types)."' id='sub_types'/>";
+      }
+    ?>
+    <h4>Update Daily Expense Record</h4>
+    <form method="post" action="addRecord.php">
+      <?php
+      echo '<input type="hidden" name="id" value="">';
+      ?>
+      <div class="box box-info">
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-3">
+              <input type="text" class="form-control" placeholder="Name" name="name">
+            </div>
+            <div class="col-xs-4">
+              <select class="form-control" id="general">
+                <option value="1">Bills</option><option value="2">Education</option><option value="3">Food</option><option value="4">Personal</option><option value="5">Transportation</option>                </select>
+            </div>
+            <div class="col-xs-4">
+              <select class="form-control" id="sub_type" name="sub_type_id">
+              </select>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="text" class="form-control" name="amount">
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <input type="text" class="form-control" placeholder="Notes" name="notes">
+            </div>
+            <div class="col-xs-5">
+              <select name="payment_type_id" class="form-control"><option value="1">Credit Card</option><option value="2">Debit Card</option><option value="3">Cash</option></select>              </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-4">
+              <br>
+              <input type="text" name="url" class="form-control" id="url" placeholder="URL">
+            </div>
+            <div class="col-xs-4">
+              <br>
+              <input type="text" name="date" class="form-control" id="date" placeholder="Date of Expense">
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <input type="hidden" value="update" name="action_type">
+      <button class="btn btn-default" type="submit" value="update" >Update</button>
+      <button class="slide_close btn btn-default">Close</button>
+    </form>
+
+  </div>
   <!-- ./wrapper -->
 
   <!-- REQUIRED JS SCRIPTS -->
@@ -362,6 +431,8 @@ $payments = DailyExpense::getPayments();
 
   <script src="dist/js/jquery.popupoverlay.js"></script>
 
+  <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+
   <script src="dist/js/daily.js"></script>
 
   <script>
@@ -369,11 +440,12 @@ $payments = DailyExpense::getPayments();
       $('#slide').popup({
         focusdelay: 400,
         outline: true,
-        vertical: 'top'
-      });
+      vertical: 'top'
+    });
       $(".edit_record").editRecord();
-
-
+      $('#date').datepicker({
+      });
+      $('#general').Select({"name": "#sub_type"});
     });
   </script>
 
@@ -384,33 +456,5 @@ $payments = DailyExpense::getPayments();
   </body>
   </html>
 
-<div id="slide" class="well" style="width: 600px;">
-  <h4>Slide in example</h4>
-<pre class="prettyprint">
-<code>$('#slide').popup({
-  outline: true, // optional
-  focusdelay: 400, // optional
-  vertical: 'top' //optional
-  });
-</code>
-</pre>
-<pre class="prettyprint">
-<code>#slide_background {
-  transition: all 0.3s 0.3s;
-  }
-  #slide,
-  #slide_wrapper {
-  transition: all 0.3s ease-out;
-  }
-  #slide {
-  transform: translateX(0) translateY(-40%);
-  }
-  .popup_visible #slide {
-  transform: translateX(0) translateY(0);
-  }
-</code>
-</pre>
-  <button class="slide_close standalone_open btn btn-default">Next example</button>
-  <button class="slide_close btn btn-default">Close</button>
-</div>
-<button class="initialism slide_open btn btn-success" data-popup-ordinal="1" id="open_87232060">Slide</button>
+
+

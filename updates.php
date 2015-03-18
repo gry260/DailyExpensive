@@ -5,7 +5,8 @@ require_once("DailyExpense/Users.php");
 require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
-  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
+  $where = array("sub_type_id"=>array(1,72));
+  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false, $where);
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -26,7 +27,7 @@ if (!empty($_SESSION['daily']['user_id'])) {
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
 
   $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['temp_user_id']);
-  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
+  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true, NULL);
   $sub_types = DailyExpense::getDailySubTypes();
 }
 

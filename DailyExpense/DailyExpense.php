@@ -18,7 +18,7 @@ abstract class DailyExpense
   protected $_sub_name;
   protected $_payment_name;
 
-  public static function generateObjects($user_id, $isTemp)
+  public static function generateObjects($user_id, $isTemp, $where)
   {
     global $pdo_dbh;
     $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%M %d, %Y") as date,
@@ -29,6 +29,13 @@ abstract class DailyExpense
     where d.user_id = ' . $user_id . ' and (dy.user_id is null or dy.user_id = ' . $user_id . ')';
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
+    if(array_key_exists("sub_type_id", $where)){
+      $q .= ' and (';
+      foreach($where["sub_type_id"] as $sub_type_id){
+        $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
+      }
+      $q = substr($q, 0, -3).')';
+    }
     $q .= '
     union
 select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%m %d, %Y") as date,
@@ -39,13 +46,22 @@ left join sandbox.daily_record d on d.user_id = temp.id
 left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
 left join dailysupertypes dyy on dy.supertypeid = dyy.id
 where u.';
+
     if ($isTemp == true)
       $q .= 'temp_user_id=';
     else
       $q .= 'id=';
+    $q .= $user_id . ' and d.is_temp = "1"';
 
-    $q .= $user_id . ' and d.is_temp = "1"
-    order by date desc';
+    if(array_key_exists("sub_type_id", $where)){
+      $q .= ' and (';
+      foreach($where["sub_type_id"] as $sub_type_id){
+        $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
+      }
+      $q = substr($q, 0, -3).')';
+    }
+
+    $q .= 'order by date desc';
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

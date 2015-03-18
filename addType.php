@@ -71,8 +71,7 @@ if (!empty($lastId)) {
         {
 
         }
-        ?>
-        ';
+        ?>';
         fwrite($handle, $text);
         fclose($handle);
     }

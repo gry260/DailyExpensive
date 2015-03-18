@@ -1,4 +1,7 @@
 <?php
+
+
+
 class Array2XML {
 
   private static $xml = null;
@@ -100,43 +103,29 @@ class Array2XML {
     return $node;
   }
 
-  /*
-   * Get the root XML node, if there isn't one, create it.
-   */
   private static function getXMLRoot(){
     if(empty(self::$xml)) {
       self::init();
     }
     return self::$xml;
   }
-
-  /*
-   * Get string representation of boolean value
-   */
   private static function bool2str($v){
     //convert boolean to text value.
     $v = $v === true ? 'true' : $v;
     $v = $v === false ? 'false' : $v;
     return $v;
   }
-
-  /*
-   * Check if the tag name or attribute name contains illegal characters
-   * Ref: http://www.w3.org/TR/xml/#sec-common-syn
-   */
   private static function isValidTagName($tag){
     $pattern = '/^[a-z_]+[a-z0-9\:\-\.\_]*[^:]*$/i';
     return preg_match($pattern, $tag, $matches) && $matches[0] == $tag;
   }
 }
-
 session_start();
 require_once("DailyExpense/DailyExpense.php");
 require_once("DailyExpense/Users.php");
 require_once("DailyExpense/Comments.php");
-
 if (!empty($_SESSION['daily']['user_id'])) {
-  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
+  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false, NULL);
 } else {
   require_once("DailyExpense/UsersTemp.php");
   $usertemp = new UsersTemp(md5(get_client_ip_server()));
@@ -149,17 +138,37 @@ if (!empty($_SESSION['daily']['user_id'])) {
     $_SESSION['daily']['temp_user_id'] = $layer->inserting($data, "users_temp");
   } else
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
-  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
+    $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true, NULL);
 }
 $books = array(
-  '@attributes' => array(
-    'type' => 'fiction'
-  ),
-  'book' => 1984
+    '@attributes' => array(
+        'type' => 'fiction'
+    ),
+    'book' => 1984
 );
-header ("Content-Type:text/xml");
-$xml = Array2XML::createXML('root_node_name', $books);
-echo $xml->saveXML();
+if(!empty($records)) {
+  $res = array();
+  foreach ($records as $value) {
+    $res[$value->getDate()][] = $value;
+  }
+
+  $result = array();
+  foreach($res as $date => $records){
+    foreach($records as $key => $record){
+      $result[$date][$key]["user_id"] = $record->getUserID();
+      $result[$date][$key]["note"] = $record->getNote();
+      $result[$date][$key]["amount"] = $record->getAmount();
+      $result[$date][$key]["amount"] = $record->getAmount();
+    }
+  }
+
+  echo '<pre>';
+  print_r($result);
+  echo '</pre>';
+}
 
 
+//header ("Content-Type:text/xml");
+//$xml = Array2XML::createXML('root', $books);
+//echo $xml->saveXML();
 ?>

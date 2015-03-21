@@ -12,8 +12,7 @@
                 $selObj = $(selObj);
                 var finObj = settings.name;
                 $finObj = $(settings.name);
-                $sub_types = $("#sub_types");
-                that.action(1);
+                $sub_types = $("#user_sub_types");
                 $selObj.change(function() {
                   selObj.sumo.onChange(this);
                 });
@@ -50,12 +49,18 @@
                     $selObj = $(selObj);
                     var slide = $("#slide");
                     $selObj.click(function() {
+                        var user_sub_types = JSON.parse($("#user_sub_types").val());
+                        $("#sub_type_id option").remove();
                         $prev = JSON.parse($(this).prev().val());
+                        for (var prop in user_sub_types) {
+                            if($prev.super_type_id == user_sub_types[prop].supertypeid)
+                                $("#sub_type_id").append($("<option></option>").attr("value",user_sub_types[prop].id).text(user_sub_types[prop].name));
+                        }
                         (($prev.id) ? slide.find("input[name='id']").val($prev.id) : null);
                         (($prev.name) ? slide.find("input[name='name']").val($prev.name) : null);
                         (($prev.amount) ? slide.find("input[name='amount']").val($prev.amount) : null);
                         (($prev.url) ? slide.find("input[name='url']").val($prev.url) : null);
-                        (($prev.note) ? slide.find("input[name='note']").val($prev.note) : null);
+                        (($prev.note) ? slide.find("input[name='notes']").val($prev.note) : null);
                         (($prev.date) ? slide.find("input[name='date']").val($prev.date) : null);
                         (($prev.sub_type_id) ? slide.find("select[name='sub_type_id']").val($prev.sub_type_id) : null);
                         (($prev.super_type_id) ? slide.find("select[id='general']").val($prev.super_type_id) : null);

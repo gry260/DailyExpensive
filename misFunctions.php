@@ -201,4 +201,23 @@ function get_client_ip_server() {
   return $ipaddress;
 }
 
+function httpPost($url, $fields)
+{
+  $fields_string = '';
+
+  foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+  $fields_string = rtrim($fields_string, '&');
+  $ch = curl_init();
+  curl_setopt($ch,CURLOPT_URL,$url);
+  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+  curl_setopt($ch,CURLOPT_HEADER, false);
+  curl_setopt($ch,CURLOPT_POST, count($fields));
+  curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+  $output=curl_exec($ch);
+ // echo $output;
+  curl_close($ch);
+  return $output;
+
+}
+
 ?>

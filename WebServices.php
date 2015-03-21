@@ -1,7 +1,4 @@
 <?php
-
-
-
 class Array2XML {
 
   private static $xml = null;
@@ -77,6 +74,7 @@ class Array2XML {
       // recurse to get the node for that key
       foreach($arr as $key=>$value){
         if(!self::isValidTagName($key)) {
+
           throw new Exception('[Array2XML] Illegal character in tag name. tag: '.$key.' in node: '.$node_name);
         }
         if(is_array($value) && is_numeric(key($value))) {
@@ -120,55 +118,47 @@ class Array2XML {
     return preg_match($pattern, $tag, $matches) && $matches[0] == $tag;
   }
 }
-session_start();
-require_once("DailyExpense/DailyExpense.php");
-require_once("DailyExpense/Users.php");
-require_once("DailyExpense/Comments.php");
-if (!empty($_SESSION['daily']['user_id'])) {
-  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false, NULL);
-} else {
-  require_once("DailyExpense/UsersTemp.php");
-  $usertemp = new UsersTemp(md5(get_client_ip_server()));
-  $usertemp->CheckUser();
-  $bool = $usertemp->getIsInSystem();
-  if ($bool == false) {
-    require_once("db_abstract.php");
-    $layer = new db_abstract_layer();
-    $data = array("user_id" => '"' . $usertemp->getUserId() . '"');
-    $_SESSION['daily']['temp_user_id'] = $layer->inserting($data, "users_temp");
-  } else
-    $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
-    $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true, NULL);
-}
-$books = array(
-    '@attributes' => array(
-        'type' => 'fiction'
-    ),
-    'book' => 1984
-);
-if(!empty($records)) {
-  $res = array();
-  foreach ($records as $value) {
-    $res[$value->getDate()][] = $value;
+
+
+if(!empty($_POST['user_id'])){
+  if(!preg_match('/^[0-9]+$/', $_POST['user_id'])){
+    echo 'User ID is not valid.';
+    exit;
   }
 
-  $result = array();
-  foreach($res as $date => $records){
-    foreach($records as $key => $record){
-      $result[$date][$key]["user_id"] = $record->getUserID();
-      $result[$date][$key]["note"] = $record->getNote();
-      $result[$date][$key]["amount"] = $record->getAmount();
-      $result[$date][$key]["amount"] = $record->getAmount();
+  if(empty($_POST['is_temp']))
+    $bool = false;
+  else
+    $bool = true;
+
+  require_once("DailyExpense/DailyExpense.php");
+  $records = DailyExpense::generateObjects($_POST['user_id'], $bool, NULL);
+  if(!empty($records)) {
+    $res = array();
+    foreach ($records as $value) {
+      $res[$value->getDate()][] = $value;
     }
+    $result = array();
+    foreach($res as $date => $records)  {
+      foreach($records as $key => $record)  {
+        $result[$date]['record_'.$key]["user_id"] = $record->getUserID();
+        $result[$date]['record_'.$key]["note"] = $record->getNote();
+        $result[$date]['record_'.$key]["amount"] = $record->getAmount();
+        $result[$date]['record_'.$key]["name"] = $record->getName();
+        $result[$date]['record_'.$key]["id"] = $record->getRecordID();
+        $result[$date]['record_'.$key]["superid"] = $record->getSuperID();
+        $result[$date]['record_'.$key]["paymentid"] = $record-> getPaymentID();
+        $result[$date]['record_'.$key]["subtypeid"] = $record-> getSubTypeID();
+        $result[$date]['record_'.$key]["url"] = $record-> getURL();
+      }
+    }
+    header ("Content-Type:text/xml");
+    $xml = Array2XML::createXML('root', $result);
+    echo $xml->saveXML();
   }
-
-  echo '<pre>';
-  print_r($result);
-  echo '</pre>';
 }
-
-
-//header ("Content-Type:text/xml");
-//$xml = Array2XML::createXML('root', $books);
-//echo $xml->saveXML();
+else{
+  echo 'No user id is given.';
+  exit;
+}
 ?>

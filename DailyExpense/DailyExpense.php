@@ -21,7 +21,7 @@ abstract class DailyExpense
   public static function generateObjects($user_id, $isTemp, $where)
   {
     global $pdo_dbh;
-    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%M %d, %Y") as date,
+    $q = 'select  dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, concat("M",UNIX_TIMESTAMP(d.date)) as date,
     d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
     from sandbox.daily_record d
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
@@ -29,7 +29,7 @@ abstract class DailyExpense
     where d.user_id = ' . $user_id . ' and (dy.user_id is null or dy.user_id = ' . $user_id . ')';
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
-    if(array_key_exists("sub_type_id", $where)){
+    if(!empty($where) && array_key_exists("sub_type_id", $where)){
       $q .= ' and (';
       foreach($where["sub_type_id"] as $sub_type_id){
         $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
@@ -38,7 +38,7 @@ abstract class DailyExpense
     }
     $q .= '
     union
-select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, DATE_FORMAT(d.date, "%m %d, %Y") as date,
+select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, concat("M",UNIX_TIMESTAMP(d.date)) as date,
 d.url, d.notes, d.amount, d.sub_type_id, dy.supertypeid, d.name as record_name, d.url as url
 from sandbox.users u
 left join sandbox.users_temp temp on u.temp_user_id = temp.id
@@ -53,7 +53,7 @@ where u.';
       $q .= 'id=';
     $q .= $user_id . ' and d.is_temp = "1"';
 
-    if(array_key_exists("sub_type_id", $where)){
+    if(!empty($where) && array_key_exists("sub_type_id", $where)){
       $q .= ' and (';
       foreach($where["sub_type_id"] as $sub_type_id){
         $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
@@ -263,7 +263,7 @@ where (user_id is null) ';
     if (!empty($this->_url))
       return $this->_url;
     else
-      return false;
+      return;
   }
 
   public function setUrl($the_url)

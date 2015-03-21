@@ -5,8 +5,8 @@ require_once("DailyExpense/Users.php");
 require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
-  $where = array("sub_type_id"=>array(1,72));
-  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false, $where);
+  $xml = httpPost($_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/daily/WebServices.php', array('user_id'=>$_SESSION['daily']['user_id'], "is_temp"=>"0"));
+  $records = simplexml_load_string($xml);
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -30,7 +30,6 @@ if (!empty($_SESSION['daily']['user_id'])) {
   $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true, NULL);
   $sub_types = DailyExpense::getDailySubTypes();
 }
-
 $general = DailyExpense::getDailySuperTypes();
 $payments = DailyExpense::getPayments();
 ?>
@@ -312,73 +311,65 @@ $payments = DailyExpense::getPayments();
       <ul class="timeline">
         <?php
         if(!empty($records)){
-          $res = array();
-          foreach($records as $value)
-            $res[$value->getDate()][] = $value;
-          if(!empty($res)){
-            foreach($res as $key => $eachDate){
-              echo '<li class="time-label">
-                <span class="bg-green">'.$key.'
+          echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
+          foreach($records as $date => $value){
+            echo '<li class="time-label">
+                <span class="bg-green">'.$date.'
                 </span>
                 </li>
                 <li>
                   <i class="fa fa-user bg-aqua"></i>
                    <div class="timeline-item">
                    <h3 class="timeline-header"><a href="#.">Support Team</a> ..</h3>';
-                  echo '<div class="row" style="padding:15px;">';
-                  foreach($eachDate as $vv){
-                    $encode["sub_type_id"] = $vv->getSubTypeID();
-                    $encode["amount"] = $vv->getAmount();
-                    echo '
+            echo '<div class="row" style="padding:15px;">';
+            foreach($value as $kk => $vv){
+              $encode = array();
+              $encode["sub_type_id"] = (int)$vv->subtypeid[0];
+              $encode["amount"] = (string)$vv->amount[0];
+              echo '
                     <div class="col-lg-2" style="margin-bottom: 15px;">
                      <div class="timeline-body">
                      <div class="product-info">
-                        <a href="javascript::;" class="product-title">'.$vv->getSubName().'
                         </a>
-                        <span class="info-box-number">$'.$vv->getAmount().'</span>
+                        <span class="info-box-number">$'.$vv->amount[0].'</span>
                         </div>
                        <div class="product-img">
                         <img src="http://placehold.it/50x50/d2d6de/ffffff" alt="Product Image">
                       </div>
                       <div class="product-info">';
-                       $name = $vv->getName();
-                        if(!empty($name)){
-                          $encode["name"] = $name;
-                          echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">'.$name.'</h4>';
-                        }
-                        $note = $vv->getNote();
-                        if(!empty($note)){
-                          $encode["note"] = $note;
-                          echo '<span class="product-description">
-                          '.$vv->getNote().'
+              if(!empty($vv->name[0])){
+                $encode["name"] =(string) $vv->name[0];
+                echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">'.$vv->name[0].'</h4>';
+              }
+              if(!empty($vv->note)){
+                $encode["note"] = (string)$vv->note;
+                echo '<span class="product-description">
+                          '.$vv->note.'
                         </span><br />';
-                        }
-                        $url = $vv->getUrl();
-                        if(!empty($url)){
-                          $encode["url"] = $url;
-                          echo '
-                          <span class="product-url">'.$vv->getUrl().'
+              }
+              if(!empty($vv->url[0])){
+                $encode["url"] =(string) $vv->url;
+                echo '
+                          <span class="product-url">'.$vv->url.'
                         </span>
                         <br />';
-                        }
-                        $encode["id"] = $vv->getRecordID();
-                        $encode["date"] = gmdate("m/d/Y", strtotime($vv->getDate())+3600);
-                        $encode["super_type_id"] = $vv->getSuperID();
-                        $encode["payment_type_id"] = $vv->getPaymentID();
-                        echo "
+              }
+              $encode["id"] =(int) $vv->id[0];
+             // $encode["date"] = gmdate("m/d/Y", strtotime($vv->getDate())+3600);
+              $encode["super_type_id"] = (int)$vv->superid[0];
+              $encode["payment_type_id"] =(int) $vv->paymentid[0];
+              echo "
                     <input type='hidden' value='".json_encode($encode)."' name='each_record'/>";
-                  echo '<button class="slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
+              echo '<button class="slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
                       </div>
                      </div>
                      </div>';
-                  }
-              echo '</div>';
-                  echo '</div>
-                </li> ';
             }
+            echo '</div></div>
+            </li>';
           }
         }
-      ?>
+        ?>
       </ul>
     </section>
   </div>
@@ -416,7 +407,7 @@ $payments = DailyExpense::getPayments();
                 <option value="1">Bills</option><option value="2">Education</option><option value="3">Food</option><option value="4">Personal</option><option value="5">Transportation</option>                </select>
             </div>
             <div class="col-xs-4">
-              <select class="form-control" id="sub_type" name="sub_type_id">
+              <select class="form-control" id="sub_type_id" name="sub_type_id">
               </select>
             </div>
           </div>
@@ -482,7 +473,7 @@ $payments = DailyExpense::getPayments();
       $(".edit_record").editRecord();
       $('#date').datepicker({
       });
-      $('#general').Select({"name": "#sub_type"});
+      $('#general').Select({"name": "#sub_type_id"});
       $('#daterange-btn').daterangepicker(
         {
           ranges: {

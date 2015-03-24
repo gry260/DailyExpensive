@@ -5,7 +5,8 @@ require_once("DailyExpense/Users.php");
 require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
-  $records = DailyExpense::generateObjects($_SESSION['daily']['user_id'], false);
+  $xml = httpPost($_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/daily/WebServices.php', array('user_id'=>$_SESSION['daily']['user_id'], "is_temp"=>"0"));
+  $records = simplexml_load_string($xml);
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -26,7 +27,8 @@ if (!empty($_SESSION['daily']['user_id'])) {
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
 
   $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['temp_user_id']);
-  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true);
+  $xml = httpPost($_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/daily/WebServices.php', array('user_id'=>$_SESSION['daily']['temp_user_id'], "is_temp"=>"1"));
+  $records = simplexml_load_string($xml);
   $sub_types = DailyExpense::getDailySubTypes();
 }
 
@@ -80,6 +82,7 @@ $payments = DailyExpense::getPayments();
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
         <?php
+        echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
         if(empty($_SESSION['daily']['user_id'])) {
           ?>
           <!-- User Account: style can be found in dropdown.less -->
@@ -425,7 +428,7 @@ $payments = DailyExpense::getPayments();
         <div class="box-body">
           <div id="example1_wrapper" class="dataTables_wrapper form-inline" role="grid"><table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
               <thead>
-              <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Name</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 423px;">Category</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Sub-Category</th>
+              <tr role="row"><th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 295px;">Name</th><th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 378px;">Sub-Category</th>
                 <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 254px;">Date</th>
                 <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Amount</th>
                 <th class="sorting" role="columnheader" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 182px;">Notes</th>
@@ -434,15 +437,14 @@ $payments = DailyExpense::getPayments();
               <tbody role="alert" aria-live="polite" aria-relevant="all">
               <?php
               if(!empty($records)){
-                foreach($records as $key => $value){
+                foreach($records as $key => $vv){
+                  foreach($vv as $kk => $value)
                   echo '<tr class="even">
-                    <td>'.$value->getName().'</td>
-                    <td>'.$value->getCategory().'</td>
-                    <td>'.$value->getsubName().'</td>
-                    <td>'.$value->getDate().'</td>
-                    <td>'.$value->getAmount().'</td>
-                    <td>'.$value->getNote().'</td>
-
+                    <td>'.$value->name.'</td>
+                    <td>'.$value->subtypeid.'</td>
+                    <td>'.$value->date.'</td>
+                    <td>'.$value->amount.'</td>
+                    <td>'.$value->note.'</td>
                     </tr>';
                 }
               }

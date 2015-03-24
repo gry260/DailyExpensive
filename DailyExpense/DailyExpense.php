@@ -27,6 +27,17 @@ abstract class DailyExpense
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
     where d.user_id = ' . $user_id . ' and (dy.user_id is null or dy.user_id = ' . $user_id . ')';
+    if(!empty($where["sub_type_ids"])){
+      $q .= ' and d.sub_type_id = '.$where["sub_type_ids"].' ';
+    }
+    if(!empty($where["min_price"])){
+      $q .= ' and d.amount >= '.$where['min_price'].' ';
+    }
+
+    if(!empty($where["max_price"])){
+      $q .= ' and d.amount <= '.$where['max_price'].' ';
+    }
+
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
     if(!empty($where) && array_key_exists("sub_type_id", $where)){
@@ -36,6 +47,7 @@ abstract class DailyExpense
       }
       $q = substr($q, 0, -3).')';
     }
+
     $q .= '
     union
 select dy.user_id as uid, dy.name as sub_name, dyy.name as super_name, d.id as id, concat("M",UNIX_TIMESTAMP(d.date)) as date,
@@ -53,6 +65,18 @@ where u.';
       $q .= 'id=';
     $q .= $user_id . ' and d.is_temp = "1"';
 
+    if(!empty($where["sub_type_ids"])){
+      $q .= ' and d.sub_type_id = '.$where["sub_type_ids"].' ';
+    }
+
+    if(!empty($where["min_price"])){
+      $q .= ' and d.amount >= '.$where['min_price'].' ';
+    }
+
+    if(!empty($where["max_price"])){
+      $q .= ' and d.amount <= '.$where['max_price'].' ';
+    }
+
     if(!empty($where) && array_key_exists("sub_type_id", $where)){
       $q .= ' and (';
       foreach($where["sub_type_id"] as $sub_type_id){
@@ -61,7 +85,8 @@ where u.';
       $q = substr($q, 0, -3).')';
     }
 
-    $q .= 'order by date desc';
+    $q .= ' order by date desc';
+
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

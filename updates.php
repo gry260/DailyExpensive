@@ -27,7 +27,8 @@ if (!empty($_SESSION['daily']['user_id'])) {
     $_SESSION['daily']['temp_user_id'] = $usertemp->getID();
 
   $user_comments = Comments::getCommentsPerUser($_SESSION['daily']['temp_user_id']);
-  $records = DailyExpense::generateObjects($_SESSION['daily']['temp_user_id'], true, NULL);
+  $xml = httpPost($_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/daily/WebServices.php', array('user_id'=>$_SESSION['daily']['temp_user_id'], "is_temp"=>"1"));
+  $records = simplexml_load_string($xml);
   $sub_types = DailyExpense::getDailySubTypes();
 }
 $general = DailyExpense::getDailySuperTypes();
@@ -275,18 +276,26 @@ $payments = DailyExpense::getPayments();
           <h4><i class="fa fa-info"></i> Note:</h4>
           <div class="row">
             <div class="col-lg-2">
-              <select class="form-control"><option>Sub Cate</option></select>
+              <select class="form-control" id="switch"><option value=""></option>
+                <?php
+                if(!empty($sub_types)){
+                  foreach($sub_types as $type){
+                    echo '<option value="'.$type["id"].'">'.$type["name"].'</option>';
+                  }
+                }
+                ?>
+              </select>
             </div>
             <div class="col-lg-2">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" placeholder="Min Price">
+                <input type="text" class="form-control" placeholder="Min Price" id="min_price">
               </div>
              </div>
             <div class="col-lg-2">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
-                <input type="text" class="form-control" placeholder="Max Price">
+                <input type="text" class="form-control" placeholder="Max Price" id="max_price">
               </div>
             </div>
             <div class="col-lg-3">
@@ -314,8 +323,7 @@ $payments = DailyExpense::getPayments();
           echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
           foreach($records as $date => $value){
             echo '<li class="time-label">
-                <span class="bg-green">'.$date.'
-                </span>
+                <span class="bg-green">'.$date.'</span>
                 </li>
                 <li>
                   <i class="fa fa-user bg-aqua"></i>
@@ -471,8 +479,9 @@ $payments = DailyExpense::getPayments();
       vertical: 'top'
     });
       $(".edit_record").editRecord();
-      $('#date').datepicker({
-      });
+      $('#date').datepicker({});
+      $('#switch').Switch();
+      $('#min_price, #max_price').Price();
       $('#general').Select({"name": "#sub_type_id"});
       $('#daterange-btn').daterangepicker(
         {

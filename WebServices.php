@@ -119,8 +119,9 @@ class Array2XML {
   }
 }
 
-
+$data = array();
 if(!empty($_POST['user_id'])){
+
   if(!preg_match('/^[0-9]+$/', $_POST['user_id'])){
     echo 'User ID is not valid.';
     exit;
@@ -131,8 +132,19 @@ if(!empty($_POST['user_id'])){
   else
     $bool = true;
 
+  $data = array();
+  if(!empty($_POST['sub_type_ids']))
+    $data["sub_type_ids"] = $_POST['sub_type_ids'];
+
+  if(!empty($_POST['min_price']))
+    $data["min_price"] = $_POST['min_price'];
+
+  if(!empty($_POST['max_price']))
+    $data["max_price"] = $_POST['max_price'];
+
+
   require_once("DailyExpense/DailyExpense.php");
-  $records = DailyExpense::generateObjects($_POST['user_id'], $bool, NULL);
+  $records = DailyExpense::generateObjects($_POST['user_id'], $bool, $data);
   if(!empty($records)) {
     $res = array();
     foreach ($records as $value) {
@@ -150,6 +162,7 @@ if(!empty($_POST['user_id'])){
         $result[$date]['record_'.$key]["paymentid"] = $record-> getPaymentID();
         $result[$date]['record_'.$key]["subtypeid"] = $record-> getSubTypeID();
         $result[$date]['record_'.$key]["url"] = $record-> getURL();
+        $result[$date]['record_'.$key]["date"] = $record-> getDate();
       }
     }
     header ("Content-Type:text/xml");

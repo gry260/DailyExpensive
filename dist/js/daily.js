@@ -1,5 +1,77 @@
 
 (function ($) {
+
+    $.fn.Price= function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init: function () {
+                    var that = this;
+                    $selObj = $(selObj);
+                    $($selObj).keyup(function() {
+                       if($.isNumeric($(this).val()) == true){
+                           if($(this).attr("id") == "min_price")
+                               var formData = {min_price: $(this).val()};
+                           else if($(this).attr("id") == "max_price")
+                               var formData = {max_price: $(this).val()};
+                           $.ajax({
+                               url : "ajax.php",
+                               type: "POST",
+                               data : formData,
+                               success: function(data, textStatus, jqXHR) {
+                                   console.log(data);
+                               },
+                               error: function (jqXHR, textStatus, errorThrown) {
+
+                               }
+                           });
+                       }
+                    });
+
+                }
+            }
+            selObj.sumo.init();
+        });
+    };
+
+    $.fn.Switch = function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init:function(){
+                    var that = this;
+                    $selObj = $(selObj);
+                    $selObj.change(function() {
+                        selObj.sumo.onChange(this);
+                    });
+                },
+                onChange:function(obj){
+                    var that = this;
+                    var val = $(obj).find("option:selected").val();
+                    var formData = {sub_type_id: val}; //Array
+                    $.ajax({
+                        url : "ajax.php",
+                        type: "POST",
+                        data : formData,
+                        success: function(data, textStatus, jqXHR) {
+                            console.log(data);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }
+                    });
+                }
+            }
+            selObj.sumo.init();
+        });
+    };
+
     $.fn.Select = function (options) {
         var settings = $.extend({
         }, options);
@@ -13,6 +85,7 @@
                 var finObj = settings.name;
                 $finObj = $(settings.name);
                 $sub_types = $("#user_sub_types");
+                that.action(1);
                 $selObj.change(function() {
                   selObj.sumo.onChange(this);
                 });

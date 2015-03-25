@@ -55,11 +55,13 @@ $payments = DailyExpense::getPayments();
 
     <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
+    <link href="dist/css/jquery.multiselect.css"  type="text/css" />
     <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css"/>
     <link href="dist/css/style.css" rel="stylesheet" type="text/css"/>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -277,14 +279,18 @@ $payments = DailyExpense::getPayments();
           <h4><i class="fa fa-info"></i> Note:</h4>
           <div class="row">
             <div class="col-lg-2">
-              <select class="form-control" id="switch"><option value=""></option>
-                <?php
-                if(!empty($sub_types)){
-                  foreach($sub_types as $type){
-                    echo '<option value="'.$type["id"].'">'.$type["name"].'</option>';
-                  }
-                }
-                ?>
+              <select name="example-optgroup" id="cate_sub_types" multiple="multiple" size="5">
+                <optgroup label="Group One">
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </optgroup>
+                <optgroup label="Group Two">
+                  <option value="option4">Option 4</option>
+                  <option value="option5">Option 5</option>
+                  <option value="option6">Option 6</option>
+                  <option value="option7">Option 7</option>
+                </optgroup>
               </select>
             </div>
             <div class="col-lg-2">
@@ -479,6 +485,10 @@ $payments = DailyExpense::getPayments();
 
   <!-- jQuery 2.1.3 -->
   <script src="plugins/jQuery/jQuery-2.1.3.min.js"></script>
+
+  <!-- jQuery UI -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+
   <!-- Bootstrap 3.3.2 JS -->
   <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
   <!-- AdminLTE App -->
@@ -488,6 +498,7 @@ $payments = DailyExpense::getPayments();
 
   <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
   <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+  <script src="dist/js/jquery.multiselect.js"></script>
 
   <script src="dist/js/daily.js"></script>
 
@@ -506,6 +517,7 @@ $payments = DailyExpense::getPayments();
       $('#reservation').daterangepicker();
       $('.daterangepicker .btn-success').reservation();
       $('#form_time_content').last();
+      $("#cate_sub_types").multiselect();
     });
   </script>
 

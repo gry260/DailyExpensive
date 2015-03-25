@@ -1,6 +1,6 @@
 
 (function ($) {
-
+    $("#cate_sub_types").multiselect();
     $.fn.last= function (options) {
         var settings = $.extend({
         }, options);

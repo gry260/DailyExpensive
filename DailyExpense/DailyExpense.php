@@ -222,8 +222,10 @@ where u.';
   public static function getDailySubTypes()
   {
     global $pdo_dbh;
-    $q = 'select * from sandbox.dailysubtypes
-where (user_id is null) ';
+    $q = 'select *
+from sandbox.dailysubtypes dy
+join sandbox.dailysupertypes dyy on dy.dailysupertypes = dyy.id
+where (dy.user_id is null) ';
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

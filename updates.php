@@ -44,8 +44,6 @@ $payments = DailyExpense::getPayments();
     <meta charset="UTF-8">
     <title>AdminLTE 2 | Dashboard</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- Bootstrap 3.3.2 -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css"/>
@@ -57,13 +55,15 @@ $payments = DailyExpense::getPayments();
     <link href="plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap 3.3.2 -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
-    <link href="dist/css/jquery.multiselect.css"  type="text/css" />
+    <link rel="stylesheet" href="dist/css/jquery.multiselect.css"  type="text/css" />
     <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css"/>
-    <link href="dist/css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="dist/css/style.css" rel="stylesheet" type="text/css"/>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
@@ -279,18 +279,20 @@ $payments = DailyExpense::getPayments();
           <h4><i class="fa fa-info"></i> Note:</h4>
           <div class="row">
             <div class="col-lg-2">
-              <select name="example-optgroup" id="cate_sub_types" multiple="multiple" size="5">
-                <optgroup label="Group One">
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </optgroup>
-                <optgroup label="Group Two">
-                  <option value="option4">Option 4</option>
-                  <option value="option5">Option 5</option>
-                  <option value="option6">Option 6</option>
-                  <option value="option7">Option 7</option>
-                </optgroup>
+              <select name="example-optgroup" style="height:34px" id="cate_sub_types" multiple="multiple" size="5">
+                <?php
+                echo '<optgroup label="Bills">';
+                if(!empty($sub_types)){
+                  foreach($sub_types as $sub_type){
+                    if($sub_type["supertypeid"] != $lastID && !empty($lastID)){
+                      echo '</optgroup><optgroup label="'.$sub_type["name"].'">';
+                    }
+                    $lastID = $sub_type["supertypeid"];
+                    echo '<option value="'.$sub_type["id"].'">'.$sub_type["sub_name"].'</option>';
+                  }
+                }
+                echo '</optgroup>';
+                ?>
               </select>
             </div>
             <div class="col-lg-2">
@@ -516,7 +518,7 @@ $payments = DailyExpense::getPayments();
      // $('#general').Select({"name": "#sub_type_id"});
       $('#reservation').daterangepicker();
       $('.daterangepicker .btn-success').reservation();
-      $('#form_time_content').last();
+      $('#form_time_content').lastType();
       $("#cate_sub_types").multiselect();
     });
   </script>

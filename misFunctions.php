@@ -214,7 +214,7 @@ function httpPost($url, $fields)
   curl_setopt($ch,CURLOPT_POST, count($fields));
   curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
   $output=curl_exec($ch);
- // echo $output;
+//  echo $output;
   curl_close($ch);
   return $output;
 

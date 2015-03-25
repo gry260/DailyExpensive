@@ -38,6 +38,19 @@ abstract class DailyExpense
       $q .= ' and d.amount <= '.$where['max_price'].' ';
     }
 
+    if(!empty($where["spec_date"])){
+      $today = date("Y-m-d");
+      $q .= ' and (d.date >= "'.$where['spec_date'].'"  and d.date <= "'.$today.'")';
+    }
+
+    if(!empty($where["start_date"])){
+      $q .= ' and d.date >= "'.$where['start_date'].'" ';
+    }
+
+    if(!empty($where["end_date"])){
+      $q .= ' and d.date <= "'.$where['end_date'].'" ';
+    }
+
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
     if(!empty($where) && array_key_exists("sub_type_id", $where)){
@@ -69,12 +82,25 @@ where u.';
       $q .= ' and d.sub_type_id = '.$where["sub_type_ids"].' ';
     }
 
+    if(!empty($where["spec_date"])){
+      $today = date("Y-m-d");
+      $q .= ' and (d.date >= "'.$where['spec_date'].'"  and d.date <= "'.$today.'")';
+    }
+
     if(!empty($where["min_price"])){
       $q .= ' and d.amount >= '.$where['min_price'].' ';
     }
 
     if(!empty($where["max_price"])){
       $q .= ' and d.amount <= '.$where['max_price'].' ';
+    }
+
+    if(!empty($where["start_date"])){
+      $q .= ' and d.date >= "'.$where['start_date'].'" ';
+    }
+
+    if(!empty($where["end_date"])){
+      $q .= ' and d.date <= "'.$where['end_date'].' "';
     }
 
     if(!empty($where) && array_key_exists("sub_type_id", $where)){
@@ -86,7 +112,6 @@ where u.';
     }
 
     $q .= ' order by date desc';
-
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

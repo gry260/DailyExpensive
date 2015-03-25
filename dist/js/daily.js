@@ -1,6 +1,79 @@
 
 (function ($) {
 
+    $.fn.last= function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init: function () {
+                    var that = this;
+                    $selObj = $(selObj);
+                    $selObj.change(function() {
+                        selObj.sumo.onChange(this);
+                    });
+                },
+                onChange:function(obj){
+                    var that = this;
+                    var val = $(obj).find("option:selected").val();
+                    var formData = {last_type: val};
+                    $.ajax({
+                        url : "ajax.php",
+                        type: "POST",
+                        data : formData,
+                        success: function(data, textStatus, jqXHR) {
+                            console.log(data);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                         //   console.log(errorThrown);
+                        }
+                    });
+                }
+            }
+            selObj.sumo.init();
+        });
+    };
+
+    $.fn.reservation= function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init: function () {
+                    var that = this;
+                    $selObj = $(selObj);
+                    $($selObj).click(function() {
+                        var start_day = $(".daterangepicker").find(".calendar.left .table-condensed .available.active.start-date").text();
+                        var end_day = $(".daterangepicker").find(".calendar.right .table-condensed .available.active.end-date").text();
+                        var start_date = $(".daterangepicker").find(".calendar.left .table-condensed thead tr th:eq(1)").text();
+                        var end_date = $(".daterangepicker").find(".calendar.right .table-condensed thead tr th:eq(1)").text();
+                        var pieces_1 = start_date.split(" ");
+                        var pieces_2 = end_date.split(" ");
+                        start_date = pieces_1[0] + " " + start_day + ", "+pieces_1[1];
+                        end_date = pieces_2[0] + " " + end_day + ", "+pieces_2[1];
+                        var formData = {start_date: start_date, end_date: end_date};
+                        $.ajax({
+                            url : "ajax.php",
+                            type: "POST",
+                            data : formData,
+                            success: function(data, textStatus, jqXHR) {
+                                console.log(data);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                    });
+                }
+            }
+            selObj.sumo.init();
+        });
+    };
+
     $.fn.Price= function (options) {
         var settings = $.extend({
         }, options);

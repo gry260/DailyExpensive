@@ -118,7 +118,6 @@ class Array2XML {
     return preg_match($pattern, $tag, $matches) && $matches[0] == $tag;
   }
 }
-
 $data = array();
 if(!empty($_POST['user_id'])){
 
@@ -143,6 +142,15 @@ if(!empty($_POST['user_id'])){
     $data["max_price"] = $_POST['max_price'];
 
 
+  if(!empty($_POST['start_date']))
+    $data["start_date"] = $_POST['start_date'];
+
+  if(!empty($_POST['end_date']))
+    $data["end_date"] = $_POST['end_date'];
+
+  if(!empty($_POST['spec_date'])){
+    $data["spec_date"] = $_POST['spec_date'];
+  }
   require_once("DailyExpense/DailyExpense.php");
   $records = DailyExpense::generateObjects($_POST['user_id'], $bool, $data);
   if(!empty($records)) {

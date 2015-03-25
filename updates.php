@@ -53,6 +53,7 @@ $payments = DailyExpense::getPayments();
     <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
     <!-- Theme style -->
 
+    <link href="plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
     <link href="dist/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -65,7 +66,7 @@ $payments = DailyExpense::getPayments();
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body class="skin-blue layout-boxed">
+  <body class="skin-blue">
   <div class="wrapper">
   <!-- Main Header -->
   <header class="main-header">
@@ -298,15 +299,33 @@ $payments = DailyExpense::getPayments();
                 <input type="text" class="form-control" placeholder="Max Price" id="max_price">
               </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-2">
               <div class="input-group">
-                <button class="btn btn-default pull-right" style="width:186px;" id="daterange-btn">
-                  <i class="fa fa-calendar"></i> Date range picker
-                  <i class="fa fa-caret-down"></i>
-                </button>
+                <div class="input-group-addon">
+                  <i class="fa fa-clock-o"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="reservation" class="reservation">
               </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-2">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-clock-o"></i>
+                </div>
+                <?php
+                echo '<select class="form-control" id="form_time_content">
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="last_7">Last 7 days</option>
+                  <option value="last_30">Last 30 days</option>
+                  <option value="this_month">This Month</option>
+                  <option value="last_month">Last Month</option>
+                  <option value="last_six_month">Last Six Months</option>
+                </select>';
+                ?>
+              </div>
+            </div>
+            <div class="col-lg-2">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search"><span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
@@ -322,8 +341,10 @@ $payments = DailyExpense::getPayments();
         if(!empty($records)){
           echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
           foreach($records as $date => $value){
+            $date= ltrim ($date, 'M');
+            $the_date = gmdate("M d, Y", $date);
             echo '<li class="time-label">
-                <span class="bg-green">'.$date.'</span>
+                <span class="bg-green">'.$the_date.'</span>
                 </li>
                 <li>
                   <i class="fa fa-user bg-aqua"></i>
@@ -363,7 +384,7 @@ $payments = DailyExpense::getPayments();
                         <br />';
               }
               $encode["id"] =(int) $vv->id[0];
-             // $encode["date"] = gmdate("m/d/Y", strtotime($vv->getDate())+3600);
+              $encode["date"] = gmdate("m/d/Y",$date+3600);
               $encode["super_type_id"] = (int)$vv->superid[0];
               $encode["payment_type_id"] =(int) $vv->paymentid[0];
               echo "
@@ -466,7 +487,6 @@ $payments = DailyExpense::getPayments();
   <script src="dist/js/jquery.popupoverlay.js"></script>
 
   <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
-
   <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
 
   <script src="dist/js/daily.js"></script>
@@ -482,24 +502,10 @@ $payments = DailyExpense::getPayments();
       $('#date').datepicker({});
       $('#switch').Switch();
       $('#min_price, #max_price').Price();
-      $('#general').Select({"name": "#sub_type_id"});
-      $('#daterange-btn').daterangepicker(
-        {
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            'Last 7 Days': [moment().subtract('days', 6), moment()],
-            'Last 30 Days': [moment().subtract('days', 29), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-          },
-          startDate: moment().subtract('days', 29),
-          endDate: moment()
-        },
-        function (start, end) {
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
-      );
+     // $('#general').Select({"name": "#sub_type_id"});
+      $('#reservation').daterangepicker();
+      $('.daterangepicker .btn-success').reservation();
+      $('#form_time_content').last();
     });
   </script>
 
@@ -509,6 +515,10 @@ $payments = DailyExpense::getPayments();
         user experience -->
   </body>
   </html>
+
+<?php
+echo strtotime("dec 15,2015");
+?>
 
 
 

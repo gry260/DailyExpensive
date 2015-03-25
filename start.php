@@ -66,7 +66,7 @@ $payments = DailyExpense::getPayments();
   <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="skin-blue layout-boxed">
+<body class="skin-blue">
 <div class="wrapper">
 
 <header class="main-header">

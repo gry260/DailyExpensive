@@ -1,3 +1,13 @@
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
 
 (function ($) {
     $.fn.lastType= function (options) {
@@ -118,19 +128,39 @@
             this.sumo = {
                 init:function(){
                     var that = this;
+                    localStorage.removeItem("datas");
                     $selObj = $(selObj);
-                    $selObj.change(function() {
+                    $selObj.click(function() {
                         selObj.sumo.onChange(this);
                     });
                 },
                 onChange:function(obj){
                     var that = this;
-                    var val = $(obj).find("option:selected").val();
-                    var formData = {sub_type_id: val}; //Array
+                    if($(obj).attr("aria-selected") === undefined || $(obj).attr("aria-selected") == "false"){
+
+                        if (localStorage.getItem("datas") !== null)
+                          var datas = JSON.parse(localStorage["datas"]);
+                        else
+                          var datas = [];
+
+                        datas.push(parseInt($(obj).attr("value")));
+                        localStorage["datas"] = JSON.stringify(datas);
+                    }
+                    else if($(obj).attr("aria-selected") == "true") {
+                        if (localStorage.getItem("datas") !== null){
+                            var datas = JSON.parse(localStorage["datas"]);
+                            datas.remove(parseInt($(obj).attr('value')));
+                            localStorage["datas"] = JSON.stringify(datas);
+                        }
+                    }
+                    var rv = {};
+                    for (var i = 0; i < datas.length; ++i)
+                        rv["sub_type_id_"+i] = datas[i];
+
                     $.ajax({
                         url : "ajax.php",
                         type: "POST",
-                        data : formData,
+                        data : rv,
                         success: function(data, textStatus, jqXHR) {
                             console.log(data);
                         },

@@ -36,7 +36,7 @@ class Users
     public  function getDailySubTypes()
     {
         global $pdo_dbh;
-        $q = 'select *, dy.name as sub_name from sandbox.dailysubtypes dy
+        $q = 'select *, dy.name as sub_name, dy.id as id from sandbox.dailysubtypes dy
 join sandbox.dailysupertypes dyy on dy.supertypeid = dyy.id
 where (user_id is null or user_id='.$this->_user_id.')
 order by dy.supertypeid, dy.name';

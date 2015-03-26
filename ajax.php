@@ -38,6 +38,15 @@ if(!empty($_POST['end_date'])){
   $data["end_date"]= gmdate("Y-m-d",strtotime($_POST['end_date']));
 }
 
+if(!empty($_POST)){
+  $sub_type_ids = array();
+  foreach($_POST as $key => $value){
+    if(preg_match('/^sub\_type\_id\_[0-9]+$/', $key, $info)){
+      $data[$key] = $value;
+    }
+  }
+}
+
 if(!empty($_POST['last_type'])){
   switch($_POST['last_type']){
     case "today":

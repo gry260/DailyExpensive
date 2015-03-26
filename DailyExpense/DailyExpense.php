@@ -27,9 +27,7 @@ abstract class DailyExpense
     left join sandbox.dailysubtypes dy on dy.id = d.sub_type_id
     left join dailysupertypes dyy on dy.supertypeid = dyy.id
     where d.user_id = ' . $user_id . ' and (dy.user_id is null or dy.user_id = ' . $user_id . ')';
-    if(!empty($where["sub_type_ids"])){
-      $q .= ' and d.sub_type_id = '.$where["sub_type_ids"].' ';
-    }
+
     if(!empty($where["min_price"])){
       $q .= ' and d.amount >= '.$where['min_price'].' ';
     }
@@ -53,9 +51,9 @@ abstract class DailyExpense
 
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
-    if(!empty($where) && array_key_exists("sub_type_id", $where)){
+    if(!empty($where) && array_key_exists("sub_type_ids", $where)){
       $q .= ' and (';
-      foreach($where["sub_type_id"] as $sub_type_id){
+      foreach($where["sub_type_ids"] as $sub_type_id){
         $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
       }
       $q = substr($q, 0, -3).')';
@@ -78,10 +76,6 @@ where u.';
       $q .= 'id=';
     $q .= $user_id . ' and d.is_temp = "1"';
 
-    if(!empty($where["sub_type_ids"])){
-      $q .= ' and d.sub_type_id = '.$where["sub_type_ids"].' ';
-    }
-
     if(!empty($where["spec_date"])){
       $today = date("Y-m-d");
       $q .= ' and (d.date >= "'.$where['spec_date'].'"  and d.date <= "'.$today.'")';
@@ -103,15 +97,17 @@ where u.';
       $q .= ' and d.date <= "'.$where['end_date'].' "';
     }
 
-    if(!empty($where) && array_key_exists("sub_type_id", $where)){
+    if(!empty($where) && array_key_exists("sub_type_ids", $where)){
       $q .= ' and (';
-      foreach($where["sub_type_id"] as $sub_type_id){
+      foreach($where["sub_type_ids"] as $sub_type_id){
         $q .= '  d.sub_type_id = '.$sub_type_id .' or ';
       }
       $q = substr($q, 0, -3).')';
     }
 
     $q .= ' order by date desc';
+
+    //echo $q;
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

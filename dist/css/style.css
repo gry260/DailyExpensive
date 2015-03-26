@@ -45,3 +45,8 @@
     background-image: none;
     border: 1px solid #ccc;
 }
+
+
+input[type=search] {
+    color:black !important;
+}

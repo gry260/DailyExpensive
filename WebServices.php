@@ -151,6 +151,16 @@ if(!empty($_POST['user_id'])){
   if(!empty($_POST['spec_date'])){
     $data["spec_date"] = $_POST['spec_date'];
   }
+
+  if(!empty($_POST)){
+    $sub_type_ids = array();
+    foreach($_POST as $key => $value){
+      if(preg_match('/^sub\_type\_id\_[0-9]+$/', $key, $info)){
+        $data["sub_type_ids"][] = $value;
+      }
+    }
+  }
+
   require_once("DailyExpense/DailyExpense.php");
   $records = DailyExpense::generateObjects($_POST['user_id'], $bool, $data);
   if(!empty($records)) {

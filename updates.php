@@ -62,6 +62,7 @@ $payments = DailyExpense::getPayments();
           apply the skin class to the body tag so the changes take effect.
     -->
     <link rel="stylesheet" href="dist/css/jquery.multiselect.css"  type="text/css" />
+    <link rel="stylesheet" href="dist/css/jquery.multiselect.filter.css"  type="text/css" />
     <link href="dist/css/skins/skin-blue.min.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="dist/css/style.css" rel="stylesheet" type="text/css"/>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -371,7 +372,7 @@ $payments = DailyExpense::getPayments();
                         <span class="info-box-number">$'.$vv->amount[0].'</span>
                         </div>
                        <div class="product-img">
-                        <img src="http://placehold.it/50x50/d2d6de/ffffff" alt="Product Image">
+                        <img src="http://placehold.it/50x50/d2d6de" alt="Product Image">
                       </div>
                       <div class="product-info">';
               if(!empty($vv->name[0])){
@@ -501,6 +502,7 @@ $payments = DailyExpense::getPayments();
   <script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
   <script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
   <script src="dist/js/jquery.multiselect.js"></script>
+  <script src="dist/js/jquery.multiselect.filter.js"></script>
 
   <script src="dist/js/daily.js"></script>
 
@@ -511,15 +513,16 @@ $payments = DailyExpense::getPayments();
         outline: true,
       vertical: 'top'
     });
+      $("#cate_sub_types").multiselect().multiselectfilter();
       $(".edit_record").editRecord();
       $('#date').datepicker({});
-      $('#switch').Switch();
+      $('input[name="multiselect_cate_sub_types"]').Switch();
       $('#min_price, #max_price').Price();
      // $('#general').Select({"name": "#sub_type_id"});
       $('#reservation').daterangepicker();
       $('.daterangepicker .btn-success').reservation();
       $('#form_time_content').lastType();
-      $("#cate_sub_types").multiselect();
+
     });
   </script>
 

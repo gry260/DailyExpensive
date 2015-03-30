@@ -49,6 +49,11 @@ abstract class DailyExpense
       $q .= ' and d.date <= "'.$where['end_date'].'" ';
     }
 
+    if(!empty($where["text"])){
+      $q .= ' and (d.amount like  "%'.$where['text'].'%" or d.name like  "%'.$where['text'].'%"
+      or d.notes like  "%'.$where['text'].'%" or d.url like  "%'.$where['text'].'%") ';
+    }
+
     if ($isTemp == true)
       $q .= ' and d.is_temp = "1"';
     if(!empty($where) && array_key_exists("sub_type_ids", $where)){
@@ -105,9 +110,15 @@ where u.';
       $q = substr($q, 0, -3).')';
     }
 
+    if(!empty($where["text"])){
+      $q .= ' and (d.amount like  "%'.$where['text'].'%" or d.name like  "%'.$where['text'].'%"
+      or d.notes like  "%'.$where['text'].'%" or d.url like  "%'.$where['text'].'%") ';
+    }
+
     $q .= ' order by date desc';
 
-    //echo $q;
+//    echo $q;
+
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
     $n = $statement->rowCount();

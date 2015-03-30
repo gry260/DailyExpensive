@@ -152,6 +152,11 @@ if(!empty($_POST['user_id'])){
     $data["spec_date"] = $_POST['spec_date'];
   }
 
+  if(!empty($_POST['text'])){
+    $data["text"]= $_POST['text'];
+  }
+
+
   if(!empty($_POST)){
     $sub_type_ids = array();
     foreach($_POST as $key => $value){

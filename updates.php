@@ -33,6 +33,10 @@ if (!empty($_SESSION['daily']['user_id'])) {
 }
 $general = DailyExpense::getDailySuperTypes();
 $payments = DailyExpense::getPayments();
+
+if(!empty($_SESSION['daily']['search_records'])){
+  unset($_SESSION['daily']['search_records']);
+}
 ?>
   <!DOCTYPE html>
   <!--
@@ -323,12 +327,11 @@ $payments = DailyExpense::getPayments();
                 </div>
                 <?php
                 echo '<select class="form-control" id="form_time_content">
-                  <option value="today">Today</option>
-                  <option value="yesterday">Yesterday</option>
+                  <option value="">Please Select an Option</option>
+                  <option value="yesterday">Last 24 hours</option>
                   <option value="last_7">Last 7 days</option>
                   <option value="last_30">Last 30 days</option>
                   <option value="this_month">This Month</option>
-                  <option value="last_month">Last Month</option>
                   <option value="last_six_month">Last Six Months</option>
                 </select>';
                 ?>
@@ -336,8 +339,8 @@ $payments = DailyExpense::getPayments();
             </div>
             <div class="col-lg-2">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search"><span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                <input type="text" class="form-control"  id="search_records" placeholder="Search"><span class="input-group-btn">
+                <button type="submit" name="search" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
               </span>
               </div>
@@ -350,9 +353,9 @@ $payments = DailyExpense::getPayments();
         if(!empty($records)){
           echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
           foreach($records as $date => $value){
-            $date= ltrim ($date, 'M');
-            $the_date = gmdate("M d, Y", $date);
-            echo '<li class="time-label">
+            $tdate= ltrim ($date, 'M');
+            $the_date = gmdate("M d, Y", $tdate);
+            echo '<li class="time-label" value="'.$date.'">
                 <span class="bg-green">'.$the_date.'</span>
                 </li>
                 <li>
@@ -365,39 +368,39 @@ $payments = DailyExpense::getPayments();
               $encode["sub_type_id"] = (int)$vv->subtypeid[0];
               $encode["amount"] = (string)$vv->amount[0];
               echo '
-                    <div class="col-lg-2" style="margin-bottom: 15px;">
+                    <div class="col-lg-1" style="margin-bottom: 15px;background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px; margin-left:15px;padding:15px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);  overflow: hidden;">
                      <div class="timeline-body">
                      <div class="product-info">
                         </a>
-                        <span class="info-box-number">$'.$vv->amount[0].'</span>
+                        <span class="info-box-number record_amount">$'.$vv->amount[0].'</span>
                         </div>
                        <div class="product-img">
-                        <img src="http://placehold.it/50x50/d2d6de" alt="Product Image">
+                        <img src="http://placehold.it/50x50/d2d6de"  height="100" width="100" alt="Product Image">
                       </div>
                       <div class="product-info">';
               if(!empty($vv->name[0])){
                 $encode["name"] =(string) $vv->name[0];
-                echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">'.$vv->name[0].'</h4>';
+                echo '<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">
+                <a class="record_url" href="'.$vv->url.'" target="_blank">'.$vv->name[0].'</a></h4>';
               }
               if(!empty($vv->note)){
                 $encode["note"] = (string)$vv->note;
-                echo '<span class="product-description">
+                echo '<span class="product-description record_note">
                           '.$vv->note.'
                         </span><br />';
               }
               if(!empty($vv->url[0])){
                 $encode["url"] =(string) $vv->url;
-                echo '
-                          <span class="product-url">'.$vv->url.'
-                        </span>
-                        <br />';
               }
               $encode["id"] =(int) $vv->id[0];
-              $encode["date"] = gmdate("m/d/Y",$date+3600);
+              $encode["date"] = gmdate("m/d/Y",$tdate+3600);
               $encode["super_type_id"] = (int)$vv->superid[0];
               $encode["payment_type_id"] =(int) $vv->paymentid[0];
-              echo "
-                    <input type='hidden' value='".json_encode($encode)."' name='each_record'/>";
+              echo "<input type='hidden' value='".json_encode($encode)."' name='each_record' id='each_record' />";
               echo '<button class="slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
                       </div>
                      </div>
@@ -518,24 +521,17 @@ $payments = DailyExpense::getPayments();
       $('#date').datepicker({});
       $('input[name="multiselect_cate_sub_types"]').Switch();
       $('#min_price, #max_price').Price();
-     // $('#general').Select({"name": "#sub_type_id"});
+      $('#general').Select({"name": "#sub_type_id"});
       $('#reservation').daterangepicker();
       $('.daterangepicker .btn-success').reservation();
       $('#form_time_content').lastType();
+      $("#search_records").searchRecords();
 
     });
   </script>
-
-
-  <!-- Optionally, you can add Slimscroll and FastClick plugins.
-        Both of these plugins are recommended to enhance the
-        user experience -->
   </body>
   </html>
 
-<?php
-echo strtotime("dec 15,2015");
-?>
 
 
 

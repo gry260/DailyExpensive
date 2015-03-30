@@ -9,6 +9,62 @@ Array.prototype.remove = function() {
     return this;
 };
 
+function util(data)
+{
+    var xmlDoc = $.parseXML( data );
+    var $xml = $(xmlDoc);
+    console.log(    $xml.find("root:first").children());
+    $xml.find("root:first").children().each(function () {
+        var that = this;
+        if($(".timeline").find(".time-label[value='"+that.nodeName+"']").length){
+            var body =   $(".timeline").find(".time-label[value='"+this.nodeName+"']").next().find(".row");
+            var first_child =   $(".timeline").find(".time-label[value='"+this.nodeName+"']").next().find(".row").children(":first");
+            var lg = $('<div class="col-lg-1" style="margin-bottom: 15px;background-color: #f5f5f5;border: 1px solid #e3e3e3;border-radius: 4px; margin-left:15px;padding:15px;-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);box-shadow: inset 0 1px 1px rgba(0,0,0,.05);  overflow: hidden;"> </div>');
+            body.children().remove();
+            var str= '';
+            $(that).children().each(function(index){
+                var user_id = $(this).find("user_id").text();
+                var note = $(this).find("note").text();
+                var amount = $(this).find("amount").text();
+                var superid = $(this).find("superid").text();
+                var id = $(this).find("id").text();
+                var subtypeid = $(this).find("subtypeid").text();
+                var url = $(this).find("url").text();
+                var date = $(this).find("date").text();
+                var name = $(this).find("name").text();
+                var paymentid = $(this).find("paymentid").text();
+
+                ((amount) ? first_child.find(".timeline-body .record_amount").text("$"+amount) : null);
+                ((note) ? first_child.find(".timeline-body .record_note").text(note) : null);
+                ((name) ? first_child.find(".timeline-body .record_url").text(name) : null);
+                ((url) ? first_child.find(".timeline-body .record_url").attr("href", url) : null);
+                date = date.substring(1);
+                date = new Date(1000*date);
+                var date = date.getFullYear() +'/'+ (date.getMonth()+1) +'/'+ date.getDate();
+
+                var obj = {
+                    user_id: user_id,
+                    note: note,
+                    amount: amount,
+                    super_type_id: superid,
+                    id: id,
+                    date: date,
+                    name: name,
+                    paymentid: paymentid,
+                    url:url,
+                    sub_type_id: subtypeid
+                };
+                obj =  JSON.stringify(obj);
+                first_child.find(".timeline-body #each_record").val(obj);
+                str += first_child[0].outerHTML;
+            });
+            body.append($(str));
+        }
+    });
+    $(".edit_record").editRecord();
+    return;
+}
+
 (function ($) {
     $.fn.lastType= function (options) {
         var settings = $.extend({
@@ -33,7 +89,7 @@ Array.prototype.remove = function() {
                         type: "POST",
                         data : formData,
                         success: function(data, textStatus, jqXHR) {
-                            console.log(data);
+                            util(data);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                          //   console.log(errorThrown);
@@ -104,7 +160,7 @@ Array.prototype.remove = function() {
                                type: "POST",
                                data : formData,
                                success: function(data, textStatus, jqXHR) {
-                                   console.log(data);
+                                   util(data);
                                },
                                error: function (jqXHR, textStatus, errorThrown) {
 
@@ -153,6 +209,7 @@ Array.prototype.remove = function() {
                             localStorage["datas"] = JSON.stringify(datas);
                         }
                     }
+
                     var rv = {};
                     for (var i = 0; i < datas.length; ++i)
                         rv["sub_type_id_"+i] = datas[i];
@@ -204,12 +261,46 @@ Array.prototype.remove = function() {
                   var sub_type_values =  sub_type_values.filter(function (person) { return person.supertypeid == index });
                   $finObj.empty();
                   for (var prop in sub_type_values) {
-                      $finObj.append($("<option></option>").attr("value",sub_type_values[prop].id).text(sub_type_values[prop].name));
+                      if(prop != "remove")
+                         $finObj.append($("<option></option>").attr("value",sub_type_values[prop].id).text(sub_type_values[prop].sub_name));
                   }
               }
            }
            selObj.sumo.init();
         });
+    };
+
+    $.fn.searchRecords = function (options) {
+        var settings = $.extend({
+        }, options);
+
+        var ret = this.each(function () {
+            var selObj = this;
+            this.sumo = {
+                init: function(){
+                    var that = this;
+                    $selObj = $(selObj);
+                    $selObj.keyup(function() {
+                        if($(this).val().length > 2){
+                            var text = $(this).val();
+                            var rv = {"text": text};
+                            $.ajax({
+                                url : "ajax.php",
+                                type: "POST",
+                                data : rv,
+                                success: function(data, textStatus, jqXHR) {
+                                    console.log(data);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+            selObj.sumo.init();
+        });
+
     };
 
     $.fn.editRecord = function (options) {
@@ -229,7 +320,7 @@ Array.prototype.remove = function() {
                         $prev = JSON.parse($(this).prev().val());
                         for (var prop in user_sub_types) {
                             if($prev.super_type_id == user_sub_types[prop].supertypeid)
-                                $("#sub_type_id").append($("<option></option>").attr("value",user_sub_types[prop].id).text(user_sub_types[prop].name));
+                                $("#sub_type_id").append($("<option></option>").attr("value",user_sub_types[prop].id).text(user_sub_types[prop].sub_name));
                         }
                         (($prev.id) ? slide.find("input[name='id']").val($prev.id) : null);
                         (($prev.name) ? slide.find("input[name='name']").val($prev.name) : null);

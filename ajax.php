@@ -105,8 +105,7 @@ if(!empty($_POST['last_type'])){
     case "last_six_month":
       $data["spec_date"]= gmdate("Y-m-d",strtotime("-6 months"));
     break;
-
-        $_SESSION['daily']['search_records']['last_type'] =     $data["spec_date"];
+    $_SESSION['daily']['search_records']['last_type'] =     $data["spec_date"];
   }
 }
 else if(!empty($_SESSION['daily']['search_records']['last_type'])){

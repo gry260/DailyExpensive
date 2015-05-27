@@ -115,9 +115,7 @@ where u.';
       or d.notes like  "%'.$where['text'].'%" or d.url like  "%'.$where['text'].'%") ';
     }
 
-    $q .= ' order by date desc';
-
-//    echo $q;
+    $q .= ' order by date desc, id';
 
     $statement = $pdo_dbh->prepare($q);
     $statement->execute();
@@ -162,7 +160,8 @@ where u.';
         if (!empty($result["supertypeid"])) {
           $record->setSuperID($result["supertypeid"]);
         }
-        $res[$result["id"]] = $record;
+
+        $res[$record->getRecordID()] = $record;
       }
       return $res;
     }
@@ -375,6 +374,20 @@ where (dy.user_id is null) ';
     else
       return false;
   }
+
+  public static function removeRecord($id)
+  {
+    global $pdo_dbh;
+    $q = 'delete
+  from sandbox.daily_record
+  where id = '.$id;
+    $statement = $pdo_dbh->prepare($q);
+    $statement->execute();
+    return;
+  }
+
+
+
 }
 
 ?>

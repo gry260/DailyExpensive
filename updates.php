@@ -6,7 +6,7 @@ require_once("DailyExpense/Comments.php");
 require_once("misFunctions.php");
 if (!empty($_SESSION['daily']['user_id'])) {
   $xml = httpPost($_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/daily/WebServices.php', array('user_id'=>$_SESSION['daily']['user_id'], "is_temp"=>"0"));
-  $records = simplexml_load_string($xml);
+   $records = simplexml_load_string($xml);
   $user = new Users($_SESSION['daily']['user_id']);
   $sub_types = $user->getDailySubTypes();
   $userInfo = $user->getUserInfo();
@@ -37,6 +37,8 @@ $payments = DailyExpense::getPayments();
 if(!empty($_SESSION['daily']['search_records'])){
   unset($_SESSION['daily']['search_records']);
 }
+
+
 ?>
   <!DOCTYPE html>
   <!--
@@ -362,24 +364,26 @@ if(!empty($_SESSION['daily']['search_records'])){
                   <i class="fa fa-user bg-aqua"></i>
                    <div class="timeline-item">
                    <h3 class="timeline-header"><a href="#.">Support Team</a> ..</h3>';
-            echo '<div class="row" style="padding:15px;">';
+            echo '<div class="row" style="padding:15px;" id="each_row_'.$date.'">';
             foreach($value as $kk => $vv){
               $encode = array();
               $encode["sub_type_id"] = (int)$vv->subtypeid[0];
               $encode["amount"] = (string)$vv->amount[0];
               echo '
-                    <div class="col-lg-1" style="margin-bottom: 15px;background-color: #f5f5f5;
+                    <div id="'.$vv->id.'" class="col-lg-1" style="background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
-  border-radius: 4px; margin-left:15px;padding:15px;
+  border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.05);  overflow: hidden;">
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.05); margin-left:15px; padding-right:175px;
+  padding-top:15px; padding-bottom:15px;
+  "><a class="remove_record" id="remove_record_'.(int) $vv->id[0].'" style="cursor:pointer;"><i class="fa fa-remove"></i> </a>
                      <div class="timeline-body">
                      <div class="product-info">
                         </a>
-                        <span class="info-box-number record_amount">$'.$vv->amount[0].'</span>
+                        <span class="info-box-number record_amount" style="font-size:14px;">$'.$vv->amount[0].'</span>
                         </div>
                        <div class="product-img">
-                        <img src="http://placehold.it/50x50/d2d6de"  height="100" width="100" alt="Product Image">
+                        <img src="http://placehold.it/50x50/d2d6de"  height="100" width="150" alt="Product Image">
                       </div>
                       <div class="product-info">';
               if(!empty($vv->name[0])){
@@ -401,7 +405,7 @@ if(!empty($_SESSION['daily']['search_records'])){
               $encode["super_type_id"] = (int)$vv->superid[0];
               $encode["payment_type_id"] =(int) $vv->paymentid[0];
               echo "<input type='hidden' value='".json_encode($encode)."' name='each_record' id='each_record' />";
-              echo '<button class="slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</button>
+              echo '<a class="btn btn-primary btn-xs slide_open btn btn-danger btn-sm edit_record" id="edit_record">Edit</a>
                       </div>
                      </div>
                      </div>';
@@ -526,7 +530,7 @@ if(!empty($_SESSION['daily']['search_records'])){
       $('.daterangepicker .btn-success').reservation();
       $('#form_time_content').lastType();
       $("#search_records").searchRecords();
-
+      $('.remove_record').removeRecord();
     });
   </script>
   </body>
@@ -535,3 +539,24 @@ if(!empty($_SESSION['daily']['search_records'])){
 
 
 
+<div id="example_record" class="col-lg-1" style="background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.05); margin-left:15px; padding-right:175px;
+  padding-top:15px; padding-bottom:15px;
+  "><a class="remove_record" id="remove_record_79" style="cursor:pointer;"><i class="fa fa-remove"></i> </a>
+  <div class="timeline-body">
+    <div class="product-info">
+      <span class="info-box-number record_amount" style="font-size:14px;">$10.00</span>
+    </div>
+    <div class="product-img">
+      <img src="http://placehold.it/50x50/d2d6de" height="100" width="150" alt="Product Image">
+    </div>
+    <div class="product-info"><h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">
+        <a class="record_url" href="" target="_blank">test</a></h4><span class="product-description record_note">
+                          test
+                        </span><br><input type="hidden" value="{&quot;sub_type_id&quot;:1,&quot;amount&quot;:&quot;10.00&quot;,&quot;name&quot;:&quot;test&quot;,&quot;note&quot;:&quot;test&quot;,&quot;id&quot;:79,&quot;date&quot;:&quot;05\/24\/2015&quot;,&quot;super_type_id&quot;:1,&quot;payment_type_id&quot;:0}" name="each_record" id="each_record"><a class="btn btn-primary btn-xs slide_open btn btn-danger btn-sm edit_record" id="edit_record" data-popup-ordinal="0">Edit</a>
+    </div>
+  </div>
+</div>

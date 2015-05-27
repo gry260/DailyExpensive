@@ -168,6 +168,7 @@ if(!empty($_POST['user_id'])){
 
   require_once("DailyExpense/DailyExpense.php");
   $records = DailyExpense::generateObjects($_POST['user_id'], $bool, $data);
+
   if(!empty($records)) {
     $res = array();
     foreach ($records as $value) {

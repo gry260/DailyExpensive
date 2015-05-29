@@ -531,6 +531,7 @@ if(!empty($_SESSION['daily']['search_records'])){
       $('#form_time_content').lastType();
       $("#search_records").searchRecords();
       $('.remove_record').removeRecord();
+
     });
   </script>
   </body>

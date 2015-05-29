@@ -187,6 +187,7 @@ function parseXML(xml)
                                             var first_record = true;
 
                                             $(that).children().each(function (index) {
+                                                $("#example_record").prepend("<h3>asdfasdf</h3>");
                                                 if($(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + $(this).find("id").text()).length > 0){
                                                     var this_record = $(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + $(this).find("id").text());
                                                     if (first_record == true) {
@@ -228,6 +229,7 @@ function parseXML(xml)
                                                         url: url,
                                                         sub_type_id: subtypeid
                                                     };
+
                                                     obj = JSON.stringify(obj);
                                                     temp.find(".timeline-body #each_record").val(obj);
                                                     temp.attr("id", id);
@@ -235,16 +237,15 @@ function parseXML(xml)
                                                     this_record = temp[0];
                                                     this_record = $(this_record);
                                                     if (first_record == true) {
-                                                       $(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").append(this_record);
+                                                       console.log(this_record);
+                                                       $("#example_record").prepend("<h3>asdfasdf</h3>");
+                                                       first_record = false;
                                                     }
                                                     else{
                                                        this_record.insertAfter($(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + last_id));
                                                     }
                                                 }
-
-
                                                 last_id = $(this).find("id").text();
-
                                             });
                                         }
                                         //if($(".timeline").find(".time-label[value='"+this.nodeName+"']").length){

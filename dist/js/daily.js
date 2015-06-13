@@ -145,10 +145,29 @@ function parseXML(xml)
     };
 
     $.fn.Price = function (options) {
-        var settings = $.extend({
-        }, options);
 
-        var temp = jQuery.extend({}, $("#example_record"));
+        var $div = $("<div>", { class: "col-lg-1"});
+        var $a = $("<a>", { class: "remove_record"});
+        var $i = $("<i>", { class: "fa fa-remove"});
+
+        var $timeline = $("<div>", { class: "timeline-body"});
+
+        var $product_info = $("<div>", { class: "product-info"});
+        var $product_img = $("<div>", { class: "product-img"});
+        var $product_info_2 = $("<div>", { class: "product-info"});
+        $product_info.append('<span class="info-box-number record_amount"></span>');
+        $product_img.append('<img src="http://placehold.it/50x50/d2d6de" height="100" width="150" alt="Product Image">');
+        $product_info_2.append('<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;"><a class="record_url" href="" target="_blank"></a></h4>');
+        $product_info_2.append('<span class="product-description record_note"></span><br />');
+        var $eachrecord = $("<input>", { class: "each_record", id: "each_record", type:"hidden"});
+        $product_info_2.append($eachrecord);
+        $product_info_2.append('<a class="btn btn-primary btn-xs slide_open btn btn-danger btn-sm edit_record" id="edit_record" data-popup-ordinal="9">Edit</a>');
+        $timeline.append($product_info).append($product_img).append($product_info_2);
+        $a.append($i);
+        $div.append($a).append($timeline);
+
+        var $tag = $.extend({
+        }, options);
 
         var ret = this.each(function () {
             var selObj = this;
@@ -169,89 +188,140 @@ function parseXML(xml)
                                 success: function (data, textStatus, jqXHR) {
                                     var xmlDoc = $.parseXML(data);
                                     var $xml = $(xmlDoc);
-                                    var first_child = true;
                                     var last_id = 0;
+                                    var last_node = 0;
                                     $xml.find("root:first").children().each(function () {
                                         var that = this;
+                                        var currentNode =  $(".timeline").find(".time-label[value='" + this.nodeName + "']");
 
-                                        if (first_child == true) {
+                                        if($(that).is(":first-child")){
                                             $(".timeline").find(".time-label[value='" + this.nodeName + "']").prevAll().remove();
-                                            first_child = false;
                                         }
 
                                         if($(that).is(":last-child")){
                                             $(".timeline").find(".time-label[value='" + this.nodeName + "']").next().nextAll().remove();
                                         }
 
+                                        if(!$(that).is(":first-child")){
+                                            $(".timeline").find(".time-label[value='" + last_node + "']").next().nextUntil(currentNode).remove();
+                                        }
+
+                                        if (!$(".timeline").find(".time-label[value='" + this.nodeName + "']").length){
+                                            var $li = $("<li>", { class: "time-label", value: that.nodeName});
+                                            var temp_date = that.nodeName.substring(1);
+                                            var date = new Date(temp_date*1000);
+                                            var month = parseInt(date.getMonth())+1;
+                                            var newString = month + '-' + date.getDate() + '-' + date.getFullYear();
+                                            var $span = $('<span class="bg-green">'+newString+'</span>');
+                                            $li.append($span);
+
+
+                                            var $li2 = $("<li>");
+                                            var $i2 = $("<i>", { class: "fa fa-user bg-aqua"});
+                                            var $div23 = $("<div>", { class: "timeline-item"});
+                                            var $timeLineHeader = $('<h3 class="timeline-header"><a href="#.">Support Team</a> ..</h3>');
+                                            var $row = $("<div>", { class: "row", id: that.nodeName});
+                                            $div23.append($timeLineHeader).append($row);
+                                            $li2.append($i2).append($div23);
+                                            var app = $li2.html();
+
+                                            if(last_node == 0){
+                                                $(".timeline").prepend($li2).prepend($li);
+                                            }
+                                            else{
+                                                $(".timeline").find(".time-label[value='" + last_node + "']").next().after($li2).after($li);
+                                            }
+                                        }
+
+
+
                                         if ($(".timeline").find(".time-label[value='" + this.nodeName + "']").length) {
-                                            var first_record = true;
 
                                             $(that).children().each(function (index) {
-                                                $("#example_record").prepend("<h3>asdfasdf</h3>");
+
+                                                var user_id = $(this).find("user_id").text();
+                                                var note = $(this).find("note").text();
+                                                var amount = $(this).find("amount").text();
+                                                var superid = $(this).find("superid").text();
+                                                var id = $(this).find("id").text();
+                                                var subtypeid = $(this).find("subtypeid").text();
+                                                var url = $(this).find("url").text();
+                                                var date = $(this).find("date").text();
+                                                var name = $(this).find("name").text();
+                                                var paymentid = $(this).find("paymentid").text();
+                                                date = date.substring(1);
+                                                date = new Date(1000 * date);
+                                                var date = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+
+                                                var obj = {
+                                                    user_id: user_id,
+                                                    note: note,
+                                                    amount: amount,
+                                                    super_type_id: superid,
+                                                    id: id,
+                                                    date: date,
+                                                    name: name,
+                                                    paymentid: paymentid,
+                                                    url: url,
+                                                    sub_type_id: subtypeid
+                                                };
+
+                                                var $div = $("<div>", { class: "col-lg-1", id: id});
+                                                var $a = $("<a>", { class: "remove_record", id:"remove_record_"+id});
+                                                var $i = $("<i>", { class: "fa fa-remove"});
+
+                                                var $timeline = $("<div>", { class: "timeline-body"});
+
+                                                var $product_info = $("<div>", { class: "product-info"});
+                                                var $product_img = $("<div>", { class: "product-img"});
+                                                var $product_info_2 = $("<div>", { class: "product-info"});
+                                                $product_info.append('<span class="info-box-number record_amount">'+amount+'</span>');
+                                                $product_img.append('<img src="http://placehold.it/50x50/d2d6de" height="100" width="150" alt="Product Image">');
+                                                $product_info_2.append('<h4 class="box-title" style="margin-top:2px; margin-bottom:5px;"><a class="record_url" href="'+url+'" target="_blank">'+name+'</a></h4>');
+                                                $product_info_2.append('<span class="product-description record_note">'+note+'</span><br />');
+                                                var $eachrecord = $("<input>", { class: "each_record", id: "each_record", type:"hidden"});
+                                                var obj = JSON.stringify(obj);
+
+
+                                                $eachrecord.val(obj);
+                                                $product_info_2.append($eachrecord);
+                                                $product_info_2.append('<a class="btn btn-primary btn-xs slide_open btn btn-danger btn-sm edit_record" id="edit_record" data-popup-ordinal="9">Edit</a>');
+                                                $timeline.append($product_info).append($product_img).append($product_info_2);
+                                                $a.append($i);
+                                                $div.append($a).append($timeline);
+
+
                                                 if($(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + $(this).find("id").text()).length > 0){
                                                     var this_record = $(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + $(this).find("id").text());
-                                                    if (first_record == true) {
+
+                                                    if($(this).is(':first-child')){
                                                         this_record.prevAll().remove();
-                                                        first_record = false;
                                                     }
-                                                    else {
+
+                                                    if($(this).is(':last-child')){
+                                                        this_record.nextAll().remove();
+                                                    }
+
+                                                    if(!$(this).is(':last-child') || !$(this).is(':first-child')) {
                                                         $(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + last_id).nextUntil(this_record).remove();
                                                     }
+
                                                 }
                                                 else{
-                                                    var user_id = $(this).find("user_id").text();
-                                                    var note = $(this).find("note").text();
-                                                    var amount = $(this).find("amount").text();
-                                                    var superid = $(this).find("superid").text();
-                                                    var id = $(this).find("id").text();
-                                                    var subtypeid = $(this).find("subtypeid").text();
-                                                    var url = $(this).find("url").text();
-                                                    var date = $(this).find("date").text();
-                                                    var name = $(this).find("name").text();
-                                                    var paymentid = $(this).find("paymentid").text();
-                                                    date = date.substring(1);
-                                                    date = new Date(1000 * date);
-                                                    var date = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-                                                    ((amount) ? temp.find(".timeline-body .record_amount").text("$" + amount) : null);
-                                                    ((note) ? temp.find(".timeline-body .record_note").text(note) : null);
-                                                    ((name) ? temp.find(".timeline-body .record_url").text(name) : null);
-                                                    ((url) ? temp.find(".timeline-body .record_url").attr("href", url) : null);
-                                                    ((date) ? temp.find(".timeline-body .record_date").text(date) : null);
-                                                    var obj = {
-                                                        user_id: user_id,
-                                                        note: note,
-                                                        amount: amount,
-                                                        super_type_id: superid,
-                                                        id: id,
-                                                        date: date,
-                                                        name: name,
-                                                        paymentid: paymentid,
-                                                        url: url,
-                                                        sub_type_id: subtypeid
-                                                    };
-
-                                                    obj = JSON.stringify(obj);
-                                                    temp.find(".timeline-body #each_record").val(obj);
-                                                    temp.attr("id", id);
-                                                    ((id) ? temp.find(".timeline-body .remove_record").attr("id", "remove_record_"+id) : null);
-                                                    this_record = temp[0];
-                                                    this_record = $(this_record);
-                                                    if (first_record == true) {
-                                                       console.log(this_record);
-                                                       $("#example_record").prepend("<h3>asdfasdf</h3>");
-                                                       first_record = false;
+                                                    if($(this).is(':first-child')){
+                                                       $(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").prepend($div);
                                                     }
                                                     else{
-                                                       this_record.insertAfter($(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + last_id));
+                                                       $div.insertAfter($(".timeline").find(".time-label[value='" + that.nodeName + "']").next().find(".row").children("#" + last_id));
                                                     }
                                                 }
                                                 last_id = $(this).find("id").text();
                                             });
                                         }
-                                        //if($(".timeline").find(".time-label[value='"+this.nodeName+"']").length){
-                                        //$(".timeline").find(".time-label[value='"+this.nodeName+"']").next().find("");
-                                        //}
+                                        last_node = this.nodeName;
                                     });
+
+                                    $(".edit_record").editRecord();
 
 
                                 },

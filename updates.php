@@ -350,10 +350,12 @@ if(!empty($_SESSION['daily']['search_records'])){
           </div>
         </div>
       </div>
+      <?php
+      echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
+      ?>
       <ul class="timeline">
         <?php
         if(!empty($records)){
-          echo "<input type='hidden' id='user_sub_types' value='".json_encode($sub_types)."'/>";
           foreach($records as $date => $value){
             $tdate= ltrim ($date, 'M');
             $the_date = gmdate("M d, Y", $tdate);
@@ -537,27 +539,3 @@ if(!empty($_SESSION['daily']['search_records'])){
   </body>
   </html>
 
-
-
-
-<div id="example_record" class="col-lg-1" style="background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.05); margin-left:15px; padding-right:175px;
-  padding-top:15px; padding-bottom:15px;
-  "><a class="remove_record" id="remove_record_79" style="cursor:pointer;"><i class="fa fa-remove"></i> </a>
-  <div class="timeline-body">
-    <div class="product-info">
-      <span class="info-box-number record_amount" style="font-size:14px;">$10.00</span>
-    </div>
-    <div class="product-img">
-      <img src="http://placehold.it/50x50/d2d6de" height="100" width="150" alt="Product Image">
-    </div>
-    <div class="product-info"><h4 class="box-title" style="margin-top:2px; margin-bottom:5px;">
-        <a class="record_url" href="" target="_blank">test</a></h4><span class="product-description record_note">
-                          test
-                        </span><br><input type="hidden" value="{&quot;sub_type_id&quot;:1,&quot;amount&quot;:&quot;10.00&quot;,&quot;name&quot;:&quot;test&quot;,&quot;note&quot;:&quot;test&quot;,&quot;id&quot;:79,&quot;date&quot;:&quot;05\/24\/2015&quot;,&quot;super_type_id&quot;:1,&quot;payment_type_id&quot;:0}" name="each_record" id="each_record"><a class="btn btn-primary btn-xs slide_open btn btn-danger btn-sm edit_record" id="edit_record" data-popup-ordinal="0">Edit</a>
-    </div>
-  </div>
-</div>
